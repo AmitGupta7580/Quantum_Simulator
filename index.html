@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Simulator</title>
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <link rel="stylesheet" href="styles.css">
+
+  <script>
+    var qubits = 4;
+    var gates = 4;
+    /* Ulitily Functions */
+    function showSnackbar() {
+      var x = document.getElementById("sk-bar");
+      x.classList.toggle("show"); 
+      setTimeout(function(){ 
+        x.classList.toggle("show"); 
+      }, 2000);
+    }
+  </script>
+</head>
+<body>
+  <div id="qc-heading">Quantum Computer Simulator</div>
+  <div id="qc-nav-bar">
+    <div class="qc-nav-list-item active" onclick="togglemenu(1)">Circuit</div>
+    <div class="qc-nav-list-item" onclick="togglemenu(2)">Functions</div>
+    <div class="qc-nav-list-item" onclick="togglemenu(3)">Examples</div>
+    <div class="qc-nav-list-item" onclick="togglemenu(4)">About us</div>
+  </div>
+  <span class="sp activesp">
+    <div id="crt-body">
+      <div id="crt-body-data">
+        <div><table><tbody id="crt-body-qubit-col-1"></tbody></table></div>
+        <div><table><tbody id="crt-body-gates-tab"></tbody></table></div>
+        <div><table><tbody id="crt-body-qubit-col-2"></tbody></table></div>
+      </div>
+      <div id="crt-body-btns">
+        Qubits    :    <input id="crt-qubit-inp" type="number" value=4 onclick="this.oldvalue = this.value;" oldvalue="" onchange="if(this.value > 25) {document.getElementById('sk-bar').innerHTML = 'Value does not excced 25'; showSnackbar(); this.value = this.oldvalue} else {qubits = this.value; this.oldvalue = this.value; }">   <  26
+        <br>
+        Gates     :    <input id="crt-gates-inp" type="number" value=4 onclick="this.oldvalue = this.value;" oldvalue="" onchange="if(this.value > 25) {document.getElementById('sk-bar').innerHTML = 'Value does not excced 25'; showSnackbar(); this.value = this.oldvalue} else {qubits = this.value; this.oldvalue = this.value; }">   <  26
+        <button id="crt-tab-create-btn" onclick="Crt_createTable()">Create</button>
+        <div>
+          Qubits 
+          <button id="crt-add-qubit-btn" onclick="Crt_addQubits()"><i class="fas fa-plus"></i></button>
+          <button id="crt-sub-qubit-btn" onclick="Crt_subQubits()"><i class="fas fa-minus"></i></button>
+        </div>
+        <div>
+          Gates 
+          <button id="crt-add-gates-btn" onclick="Crt_addGates()"><i class="fas fa-plus"></i></button>
+          <button id="crt-sub-gates-btn" onclick="Crt_subGates()"><i class="fas fa-minus"></i></button>
+        </div>
+        <button id="crt-tab-compute-btn" onclick="Crt_computeResult()">Compute</button>
+      </div>
+    </div>
+  </span>
+  <span class="sp">
+    <div>Functions</div>
+  </span>
+  <span class="sp">
+    <div>Examples</div>
+  </span>
+  <span class="sp">
+    <div>About Us</div>
+  </span>
+
+  <div id="sk-bar" class="snackbar"></div>
+
+  <script src="index.js"></script>
+</body>
+</html>

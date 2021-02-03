@@ -1,0 +1,268 @@
+html body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+.snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+#qc-heading {
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  font-size: xx-large;
+  text-align: center;
+  background-color: black;
+  color: white;
+}
+#qc-nav-bar {
+  margin-top: 1vh;
+  width: 100vw;
+  color: white;
+  height: 7vh;
+  display: inline-flex;
+  border-bottom: 0.7vh solid rgb(184, 223, 255);
+}
+.qc-nav-list-item {
+  height: 6.5vh;
+  width: 25vw;
+  padding-top: 1.5vh;
+  background-color: rgb(125, 197, 255);
+  text-align: center;
+  font-size: 22px;
+  cursor: pointer;
+  opacity: 0.75;
+}
+.active {
+  opacity: 1;
+  font-size: 26px;
+}
+.qc-nav-list-item:hover {
+  opacity: 0.9;
+}
+.sp {
+  display: none;
+}
+.activesp {
+  display: block;
+}
+
+/* Circuit */
+#crt-body {
+  display: inline-flex;
+  padding: 1vw;
+  width: 100vw;
+  height: 80vh;
+  overflow: hidden;
+}
+#crt-body-btns {
+  padding: 1vw;
+  width: 14vw;
+  height: 76vh;
+}
+input:focus, textarea:focus, select:focus{
+  outline: none;
+}
+button:focus { outline: none; }
+#crt-qubit-inp {
+  padding-left: 0.5vw;
+  margin-top: 2vh;
+  margin-left: 2vw;
+  width: 3vw;
+  font-size: larger;
+}
+#crt-gates-inp {
+  padding-left: 0.5vw;
+  margin-top: 2vh;
+  margin-left: 2.3vw;
+  width: 3vw;
+  font-size: larger;
+}
+#crt-tab-create-btn {
+  padding: 0.5vh;
+  width: 13.3vw;
+  border: none;
+  margin-top: 4vh;
+  background-color: rgb(72, 255, 96);
+  font-size: larger;
+  color: white;
+  cursor: pointer;
+  border-radius: 1vh;
+  opacity: 0.8;
+}
+#crt-tab-create-btn:hover {
+  opacity: 1;
+}
+#crt-tab-erase-btn {
+  padding: 0.5vh;
+  width: 13.3vw;
+  border: none;
+  margin-top: 4vh;
+  background-color: rgb(255, 46, 46);
+  font-size: larger;
+  color: white;
+  cursor: pointer;
+  border-radius: 1vh;
+  opacity: 0.8;
+}
+#crt-tab-erase-btn:hover {
+  opacity: 1;
+}
+#crt-add-qubit-btn {
+  width: 3vw;
+  height: 6vh;
+  font-size: x-large;
+  border: none;
+  margin-left: 1.5vw;
+  margin-top: 4vh;
+  background-color: rgb(255, 133, 51);
+  color: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  cursor: pointer;
+}
+#crt-add-qubit-btn:hover {
+  opacity: 1;
+}
+#crt-sub-qubit-btn {
+  width: 3vw;
+  height: 6vh;
+  font-size: x-large;
+  border: none;
+  margin-left: 1.2vw;
+  margin-top: 4vh;
+  background-color: rgb(255, 133, 51);
+  color: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  cursor: pointer;
+}
+#crt-sub-qubit-btn:hover {
+  opacity: 1;
+}
+#crt-add-gates-btn {
+  width: 3vw;
+  height: 6vh;
+  font-size: x-large;
+  border: none;
+  margin-left: 1.7vw;
+  margin-top: 4vh;
+  background-color: rgb(255, 133, 51);
+  color: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  cursor: pointer;
+}
+#crt-add-gates-btn:hover {
+  opacity: 1;
+}
+#crt-sub-gates-btn {
+  width: 3vw;
+  height: 6vh;
+  font-size: x-large;
+  border: none;
+  margin-left: 1.2vw;
+  margin-top: 4vh;
+  background-color: rgb(255, 133, 51);
+  color: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  cursor: pointer;
+}
+#crt-sub-gates-btn:hover {
+  opacity: 1;
+}
+#crt-tab-compute-btn {
+  padding: 0.5vh;
+  width: 13.3vw;
+  border: none;
+  margin-top: 4vh;
+  background-color: rgb(72, 255, 96);
+  font-size: larger;
+  color: white;
+  cursor: pointer;
+  border-radius: 1vh;
+  opacity: 0.8;
+}
+#crt-tab-compute-btn:hover {
+  opacity: 1;
+}
+#crt-body-data {
+  display: inline-flex;
+  padding-top: 1.5vh;
+  padding-left: 1.5vw;
+  width: 80vw;
+  height: 76vh;
+  overflow: auto;
+  border: 1vh solid black;
+}
+select {
+  border: none;
+  -webkit-appearance: none; 
+}
+.crt-qubit-out {
+  height: 2.6vh;
+  width: 5vw;
+  font-size: 17px;
+  background-color: white;
+  border: none;
+}
+.crt-body-qubit-slt {
+  padding-left: 1.3vh;
+  font-size: 17px;
+  width: 2vw;
+}
+.crt-body-gate-slt {
+  padding-left: 1.3vh;
+  font-size: 17px;
+  width: 3vw;
+}
