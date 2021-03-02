@@ -4,65 +4,208 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quantum Simulator</title>
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <script src="https://kit.fontawesome.com/58e6bdb37e.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <link rel="stylesheet" href="styles.css">
-
   <script>
-    var qubits = 4;
-    var gates = 4;
-    /* Ulitily Functions */
-    function showSnackbar() {
-      var x = document.getElementById("sk-bar");
-      x.classList.toggle("show"); 
-      setTimeout(function(){ 
-        x.classList.toggle("show"); 
-      }, 2000);
-    }
+    
   </script>
 </head>
 <body>
-  <div id="qc-heading">Quantum Computer Simulator</div>
-  <div id="qc-nav-bar">
-    <div class="qc-nav-list-item active" onclick="togglemenu(1)">Circuit</div>
-    <div class="qc-nav-list-item" onclick="togglemenu(2)">Functions</div>
-    <div class="qc-nav-list-item" onclick="togglemenu(3)">Examples</div>
-    <div class="qc-nav-list-item" onclick="togglemenu(4)">About us</div>
+  <div style="display: inline-flex;">
+    <button id="slide-nav-btn" onclick="toggleSlideMenu()"><i class="fas fa-bars"></i></button>
+    <div id="top-head">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quantum Simulator
+    </div>
   </div>
-  <span class="sp activesp">
-    <div id="crt-body">
-      <div id="crt-body-data">
-        <div><table><tbody id="crt-body-qubit-col-1"></tbody></table></div>
-        <div><table><tbody id="crt-body-gates-tab"></tbody></table></div>
-        <div><table><tbody id="crt-body-qubit-col-2"></tbody></table></div>
+  <div style="display: inline-flex;">
+    <div id="side-sh-nav-bar">
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-atom" style="padding-top: 2vh;" onclick="changeTab(0)"></i><span class="tooltiptext">Simulator</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-cloud" style="padding-top: 2vh;" onclick="changeTab(1)"></i><span class="tooltiptext">Cloud IBM Simulator</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-subscript" style="padding-top: 2vh;" onclick="changeTab(2)"></i><span class="tooltiptext">Functions</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-chart-line" style="padding-top: 2vh;" onclick="changeTab(3)"></i><span class="tooltiptext">Analysis Circuit</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fab fa-etsy" style="padding-top: 2vh;" onclick="changeTab(4)"></i><span class="tooltiptext">Examples</span></div>
+      <div class="side-sh-nav-item" style="background-color: black;" onclick="changeTab(5)"></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-book" style="padding-top: 2vh;" onclick="changeTab(6)"></i><span class="tooltiptext">Documentation</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-question" style="padding-top: 2vh;" onclick="changeTab(7)"></i><span class="tooltiptext">How It Works</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-info" style="padding-top: 2vh;" onclick="changeTab(8)"></i><span class="tooltiptext">Info</span></div>
+    </div>
+    <div id="side-nav-bar">
+      <div class="side-nav-item" onclick="changeTab(0)">Quantum Circuit Simulator</div>
+      <div class="side-nav-item" onclick="changeTab(1)">IBM Quantum Simulator</div>
+      <div class="side-nav-item" onclick="changeTab(2)">Function Simulator</div>
+      <div class="side-nav-item" onclick="changeTab(3)">Analyse Circuit</div>
+      <div class="side-nav-item" onclick="changeTab(4)">Examples</div>
+      <div class="side-nav-item" onclick="changeTab(5)"></div>
+      <div class="side-nav-item" onclick="changeTab(6)">Documentation</div>
+      <div class="side-nav-item" onclick="changeTab(7)">How It Works</div>
+      <div class="side-nav-item" onclick="changeTab(8)">About Us</div>
+    </div>
+    <div id="content">
+      <div class="cont" id="crt">
+        <div style="width: 70.5vw; height: 93vh;">
+          <div id="crt-crt">
+            <div style="display: inline-flex;">
+              <div id="crt-crt-gate">
+                <div class="crt-crt-item" style="background-color: white; color: black; margin-left: 0px; cursor: default;">Gates</div>
+                <div class="crt-crt-item" style="background-color: rgb(218, 218, 218);" draggable="true" ondragstart="drag(event)">--</div>
+                <div class="crt-crt-item" style="background-color: rgb(165, 165, 165); padding-top: 1vh;" draggable="true" ondragstart="drag(event)">*</div>
+                <div class="crt-crt-item" style="background-color: black" draggable="true" ondragstart="drag(event)">|0></div>
+                <div class="crt-crt-item" style="background-color: rgb(255, 117, 37);" draggable="true" ondragstart="drag(event)">X</div>
+                <div class="crt-crt-item" style="background-color: rgb(255, 94, 0);" draggable="true" ondragstart="drag(event)">CX</div>
+                <!-- <div class="crt-crt-item" style="background-color: rgb(255, 94, 0);" draggable="true" ondragstart="drag(event)">CCX</div> -->
+                <div class="crt-crt-item" style="background-color: rgb(255, 204, 64);" draggable="true" ondragstart="drag(event)">H</div>
+                <div class="crt-crt-item" style="background-color: rgb(195, 209, 255);" draggable="true" ondragstart="drag(event)">I</div>
+                <div class="crt-crt-item" style="background-color: rgb(133, 255, 102);" draggable="true" ondragstart="drag(event)">Mz</div>
+              </div>
+              <div class="crt-crt-item" style="background-color: green; padding-top: 1vh; cursor: pointer;" onclick="runCircuit()">Run >></div>
+            </div>
+            <div id="crt-crt-crt">
+              <div id="crt-crt-crt-qubit">
+                <div class="qubit" style="margin-top: 3vh;">
+                  <div class="qubit-label">q0</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                </div>
+                <div class="qubit">
+                  <div class="qubit-label">q1</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                </div>
+                <div class="qubit">
+                  <div class="qubit-label">q2</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                </div>
+                <div class="qubit">
+                  <div class="qubit-label">q3</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                </div>
+                <div class="qubit">
+                  <div class="qubit-label">q4</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                </div>
+              </div>
+              <div id="crt-crt-crt-out">
+                <div>c5</div>
+              </div>
+            </div>
+          </div>
+          <div id="crt-code">
+            <div id="crt-code-heading">
+              <div class="crt-code-head-item" onclick="showQiskit()">Qiskit</div>
+              <div class="crt-code-head-item" onclick="showQASM()">OpenQASM 2.0</div>
+            </div>
+            <div id="crt-code-body">
+              <div id="crt-code-qiskit">
+              </div>
+              <div id="crt-code-QASM">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="crt-res">
+          <div style="width: 23.5vw; border-bottom: 1px solid black; padding: 1vh;">Measurement Probabilities</div>
+          <div id="result-container" style="width: 23vw;">
+            <canvas height="240vh" id="crt-res-measure-prob"></canvas>
+          </div>
+          <div style="width: 23.5vw; border-bottom: 1px solid black; padding: 1vh; margin-top: 4vh;">Statevector</div>
+          <div id="result-container" style="width: 23vw; height: 50vh;">
+            <canvas height="240vh" id="crt-res-statevector"></canvas>
+          </div>
+        </div>
       </div>
-      <div id="crt-body-btns">
-        Qubits    :    <input id="crt-qubit-inp" type="number" value=4 onclick="this.oldvalue = this.value;" oldvalue="" onchange="if(this.value > 25) {document.getElementById('sk-bar').innerHTML = 'Value does not excced 25'; showSnackbar(); this.value = this.oldvalue} else {qubits = this.value; this.oldvalue = this.value; }">   <  26
-        <br>
-        Gates     :    <input id="crt-gates-inp" type="number" value=4 onclick="this.oldvalue = this.value;" oldvalue="" onchange="if(this.value > 25) {document.getElementById('sk-bar').innerHTML = 'Value does not excced 25'; showSnackbar(); this.value = this.oldvalue} else {qubits = this.value; this.oldvalue = this.value; }">   <  26
-        <button id="crt-tab-create-btn" onclick="Crt_createTable()">Create</button>
-        <div>
-          Qubits 
-          <button id="crt-add-qubit-btn" onclick="Crt_addQubits()"><i class="fas fa-plus"></i></button>
-          <button id="crt-sub-qubit-btn" onclick="Crt_subQubits()"><i class="fas fa-minus"></i></button>
-        </div>
-        <div>
-          Gates 
-          <button id="crt-add-gates-btn" onclick="Crt_addGates()"><i class="fas fa-plus"></i></button>
-          <button id="crt-sub-gates-btn" onclick="Crt_subGates()"><i class="fas fa-minus"></i></button>
-        </div>
-        <button id="crt-tab-compute-btn" onclick="Crt_computeResult()">Compute</button>
+      <div class="cont" id="ibm">
+        <div class="" style="text-align: center; padding-top: 45vh;">IBM simulator Under Construction</div>
+      </div>
+      <div class="cont" id="fnc">
+        <div style="text-align: center; padding-top: 45vh;">Functions Under Construction</div>
+      </div>
+      <div class="cont" id="ac">
+        <div style="text-align: center; padding-top: 45vh;">Analysis circuit Under Construction</div>
+      </div>
+      <div class="cont" id="ex">
+        <div style="text-align: center; padding-top: 45vh;">Examples Under Construction</div>
+      </div>
+      <div class="cont">Fake Span</div>
+      <div class="cont" id="doc">
+        <div style="text-align: center; padding-top: 45vh;">Documnetation Under Construction</div>
+      </div>
+      <div class="cont" id="hiw">
+        <div style="text-align: center; padding-top: 45vh;">How it works Under Construction</div>
+      </div>
+      <div class="cont" id="info">
+        <div style="text-align: center; padding-top: 45vh;">About us Under Construction</div>
       </div>
     </div>
-  </span>
-  <span class="sp">
-    <div>Functions</div>
-  </span>
-  <span class="sp">
-    <div>Examples</div>
-  </span>
-  <span class="sp">
-    <div>About Us</div>
-  </span>
+  </div>
 
   <div id="sk-bar" class="snackbar"></div>
 

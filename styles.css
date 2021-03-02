@@ -56,213 +56,214 @@ html body {
 ::-webkit-scrollbar-thumb:hover {
   background: #555; 
 }
-#qc-heading {
-  padding-top: 1vh;
-  padding-bottom: 1vh;
-  font-size: xx-large;
+
+.tooltiptext {
+  margin-left: 2vw;
+  margin-top: 0vw;
+  visibility: hidden;
+  width: auto;
+  background-color: rgb(32, 32, 32);
+  color: #fff;
+  font-size: 13px;
   text-align: center;
-  background-color: black;
-  color: white;
-}
-#qc-nav-bar {
-  margin-top: 1vh;
-  width: 100vw;
-  color: white;
-  height: 7vh;
-  display: inline-flex;
-  border-bottom: 0.7vh solid rgb(184, 223, 255);
-}
-.qc-nav-list-item {
-  height: 6.5vh;
-  width: 25vw;
-  padding-top: 1.5vh;
-  background-color: rgb(125, 197, 255);
-  text-align: center;
-  font-size: 22px;
-  cursor: pointer;
-  opacity: 0.75;
-}
-.active {
-  opacity: 1;
-  font-size: 26px;
-}
-.qc-nav-list-item:hover {
-  opacity: 0.9;
-}
-.sp {
-  display: none;
-}
-.activesp {
-  display: block;
+  padding: 2vh;
+  position: absolute;
+  z-index: 1;
 }
 
-/* Circuit */
-#crt-body {
-  display: inline-flex;
+.tooltiptext-gate {
+  margin-left: -3vw;
+  margin-top: 0vw;
+  visibility: hidden;
+  width: auto;
+  background-color: rgb(32, 32, 32);
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  padding: 2vh;
+  position: absolute;
+  z-index: 5;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.tooltiptog:hover .tooltiptext {
+  visibility: hidden;
+}
+.tooltip:hover .tooltiptext-gate {
+  visibility: visible;
+}
+
+/* Navigation bar and common styling*/
+#top-head {
+  width: 96.5vw;
+  height: 5vh;
+  background-color: black;
+  padding-top: 2vh;
+  color: white;
+  font-size: larger;
+}
+#slide-nav-btn {
+  height: 7vh;
+  width: 3.5vw;
+  background-color: black;
+  outline: none; 
+  border: none;
+  font-size: 18px;
+  color: rgb(228, 228, 228);
+  cursor: pointer;
+}
+#slide-nav-btn:hover{
+  background-color: rgb(58, 58, 58);
+}
+#side-sh-nav-bar {
+  height: 93vh;
+  width: 3.5vw;
+  background-color: black;
+  color: rgb(192, 192, 192);
+}
+.side-sh-nav-item {
+  height: 7vh;
+  text-align: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+.side-sh-nav-item:hover {
+  background-color: rgb(58, 58, 58);
+}
+#side-nav-bar {
+  margin-left: 3.5vw;
+  position: absolute;
+  visibility: hidden;
+  height: 93vh;
+  width: 15vw;
+  background-color: black;
+  color: rgb(192, 192, 192);
+  z-index: 2;
+}
+.side-nav-item {
+  height: 5vh;
+  padding-top: 2vh;
+  padding-left: 0.5vw;
+  font-size: 15px;
+  cursor: pointer;
+}
+.side-nav-item:hover {
+  background-color: rgb(58, 58, 58);
+}
+.cont {
+  height: 93vh;
+  width: 96.5vw;
+  display: none;
+}
+#crt-crt {
+  width: 68.5vw;
+  height: 52vh;
   padding: 1vw;
-  width: 100vw;
-  height: 80vh;
+}
+#crt-crt-gate {
+  display: inline-flex;
+  height: 4vh;
+  width: 61.4vw;
+  border-top: 0.3vh rgb(148, 148, 148, 0.5) solid;
+  border-bottom: 0.3vh rgb(148, 148, 148, 0.5) solid;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding: 0.5vh;
+}
+.crt-crt-item {
+  position: relative;
+  margin-left: 1vw;
+  text-align: center;
+  font-size: larger;
+  background-color: black;
+  padding: 0.5vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+  color: white;
+  cursor: grab;
+}
+.dragging {
+  cursor: grabbing;
+}
+.crt-crt-crt:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+#crt-crt-crt {
+  height: 43vh;
+  border-bottom: 0.3vh rgb(148, 148, 148, 0.5) solid;
+  overflow: hidden;
+  padding: 1.5vh;
+}
+#crt-crt-crt-qubit {
+  height: 38vh;
+  overflow: auto;
+}
+.qubit {
+  margin-top: 2vh;;
+  width: 65vw;
+  height: 5vh;
+  display: inline-flex;
   overflow: hidden;
 }
-#crt-body-btns {
-  padding: 1vw;
-  width: 14vw;
-  height: 76vh;
-}
-input:focus, textarea:focus, select:focus{
-  outline: none;
-}
-button:focus { outline: none; }
-#crt-qubit-inp {
-  padding-left: 0.5vw;
-  margin-top: 2vh;
-  margin-left: 2vw;
+.qubit-gate {
+  margin-left: 1vw;
+  height: 3vh;
   width: 3vw;
-  font-size: larger;
-}
-#crt-gates-inp {
-  padding-left: 0.5vw;
-  margin-top: 2vh;
-  margin-left: 2.3vw;
-  width: 3vw;
-  font-size: larger;
-}
-#crt-tab-create-btn {
+  background-color: rgb(218, 218, 218);
   padding: 0.5vh;
-  width: 13.3vw;
-  border: none;
-  margin-top: 4vh;
-  background-color: rgb(72, 255, 96);
-  font-size: larger;
+  padding-top: 0.8vh;
+  text-align: center;
   color: white;
-  cursor: pointer;
-  border-radius: 1vh;
-  opacity: 0.8;
 }
-#crt-tab-create-btn:hover {
-  opacity: 1;
+#crt-crt-crt-out {
+  margin-top: 1vh;
+} 
+#crt-code {
+  border-top: 0.3vh solid black;
+  width: 68.5vw;
+  height: 34.6vh;
+  background-color: rgb(66, 66, 66);
+  padding: 1vh;
+  overflow: hidden;
 }
-#crt-tab-erase-btn {
-  padding: 0.5vh;
-  width: 13.3vw;
-  border: none;
-  margin-top: 4vh;
-  background-color: rgb(255, 46, 46);
-  font-size: larger;
-  color: white;
-  cursor: pointer;
-  border-radius: 1vh;
-  opacity: 0.8;
-}
-#crt-tab-erase-btn:hover {
-  opacity: 1;
-}
-#crt-add-qubit-btn {
-  width: 3vw;
-  height: 6vh;
-  font-size: x-large;
-  border: none;
-  margin-left: 1.5vw;
-  margin-top: 4vh;
-  background-color: rgb(255, 133, 51);
-  color: white;
-  border-radius: 50%;
-  opacity: 0.8;
-  cursor: pointer;
-}
-#crt-add-qubit-btn:hover {
-  opacity: 1;
-}
-#crt-sub-qubit-btn {
-  width: 3vw;
-  height: 6vh;
-  font-size: x-large;
-  border: none;
-  margin-left: 1.2vw;
-  margin-top: 4vh;
-  background-color: rgb(255, 133, 51);
-  color: white;
-  border-radius: 50%;
-  opacity: 0.8;
-  cursor: pointer;
-}
-#crt-sub-qubit-btn:hover {
-  opacity: 1;
-}
-#crt-add-gates-btn {
-  width: 3vw;
-  height: 6vh;
-  font-size: x-large;
-  border: none;
-  margin-left: 1.7vw;
-  margin-top: 4vh;
-  background-color: rgb(255, 133, 51);
-  color: white;
-  border-radius: 50%;
-  opacity: 0.8;
-  cursor: pointer;
-}
-#crt-add-gates-btn:hover {
-  opacity: 1;
-}
-#crt-sub-gates-btn {
-  width: 3vw;
-  height: 6vh;
-  font-size: x-large;
-  border: none;
-  margin-left: 1.2vw;
-  margin-top: 4vh;
-  background-color: rgb(255, 133, 51);
-  color: white;
-  border-radius: 50%;
-  opacity: 0.8;
-  cursor: pointer;
-}
-#crt-sub-gates-btn:hover {
-  opacity: 1;
-}
-#crt-tab-compute-btn {
-  padding: 0.5vh;
-  width: 13.3vw;
-  border: none;
-  margin-top: 4vh;
-  background-color: rgb(72, 255, 96);
-  font-size: larger;
-  color: white;
-  cursor: pointer;
-  border-radius: 1vh;
-  opacity: 0.8;
-}
-#crt-tab-compute-btn:hover {
-  opacity: 1;
-}
-#crt-body-data {
+#crt-code-heading {
   display: inline-flex;
-  padding-top: 1.5vh;
-  padding-left: 1.5vw;
-  width: 80vw;
-  height: 76vh;
-  overflow: auto;
-  border: 1vh solid black;
+  padding: 1vh;
 }
-select {
-  border: none;
-  -webkit-appearance: none; 
+.crt-code-head-item {
+  margin-left: 1vw;
+  color: rgb(155, 155, 155);
+  cursor: pointer;
+  padding: 0.5vh;
 }
-.crt-qubit-out {
-  height: 2.6vh;
-  width: 5vw;
-  font-size: 17px;
-  background-color: white;
-  border: none;
+.crt-code-head-item:hover {
+  color: white;
 }
-.crt-body-qubit-slt {
-  padding-left: 1.3vh;
-  font-size: 17px;
-  width: 2vw;
+#crt-code-qiskit {
+  color: rgb(202, 202, 202); 
+  padding: 1vh;
+  padding-left: 0vh;
+  font-family: monospace; 
+  overflow: auto; 
+  height: 26vh; 
+  width: 65vw;
 }
-.crt-body-gate-slt {
-  padding-left: 1.3vh;
-  font-size: 17px;
-  width: 3vw;
+#crt-code-QASM {
+  color: rgb(202, 202, 202); 
+  padding: 1vh;
+  padding-left: 0vh;
+  font-family: monospace; 
+  overflow: auto; 
+  height: 26vh; 
+  width: 65vw;
+}
+#crt-res {
+  border-left: 0.3vh solid black;
+  width: 26vw;
+  height: 93vh;
+  padding: 1.5vh;
 }
