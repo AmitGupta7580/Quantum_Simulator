@@ -267,3 +267,19 @@ html body {
   height: 93vh;
   padding: 1.5vh;
 }
+#statevector1 {
+  width: 12vw;
+  height: 40vh;
+  overflow: auto;
+  font-size: 13px;
+  font-family: monospace;
+  padding-left: 2vw;
+}
+#statevector2 {
+  width: 12vw;
+  height: 40vh;
+  overflow: auto;
+  font-size: 13px;
+  font-family: monospace;
+  padding-left: 1vw;
+}

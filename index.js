@@ -17,6 +17,16 @@ var qasm_code = document.getElementById('crt-code-QASM');
 qiskit_code.appendChild(defaultQiskitCode())
 qasm_code.appendChild(defaultQASMCode())
 
+var zero = [[1], [0]];
+var one = [[0], [1]];
+var H = [[1, 1], [1, -1]];
+var X = [[0, 1], [1, 0]];
+var I = [[1, 0], [0, 1]];
+var reset = [[1, 1], [0, 0]];
+
+runCircuit();
+
+
 function changeTab(id){
   if(id === 5){
     return;
@@ -81,6 +91,7 @@ function drop(ev) {
   ev.target.style.backgroundColor = ev.dataTransfer.getData("color");
   ev.target.innerHTML = ev.dataTransfer.getData("opreation");
   writeQiskitCode();
+  runCircuit();
 }
 function defaultQiskitCode() {
   // <ol>
@@ -246,17 +257,53 @@ function runCircuit() {
     });
     opreations.push(op);
   });
+  var state = crossProduct(zero, zero)
+  for(var i=0;i<3;i++){
+    state = crossProduct(zero, state);
+  }
   var invalid = false;
   for(var i = 0; i<15;i++){
-    var dot=[],cx=[];
+    var dot=[],cx=[],opr=[];
     for(var j = 0; j<5;j++){
       if(opreations[j][i] === 'H'){
+        if(opr.length === 0){
+          opr = H;
+        }
+        else{
+          opr = crossProduct(H, opr);
+        }
       }
       else if(opreations[j][i] === 'X'){
+        if(opr.length === 0){
+          opr = X;
+        }
+        else{
+          opr = crossProduct(X, opr);
+        }
       }
       else if(opreations[j][i] === '0'){
+        if(opr.length === 0){
+          opr = reset;
+        }
+        else{
+          opr = crossProduct(reset, opr);
+        }
       }
       else if(opreations[j][i] === 'I'){
+        if(opr.length === 0){
+          opr = I;
+        }
+        else{
+          opr = crossProduct(I, opr);
+        }
+      }
+      else if(opreations[j][i] === '--'){
+        if(opr.length === 0){
+          opr = I;
+        }
+        else{
+          opr = crossProduct(I, opr);
+        }
       }
       else if(opreations[j][i] === 'Mz'){
       }
@@ -275,89 +322,135 @@ function runCircuit() {
         invalid = true;
       }
       else{
+        // opreation on cnot gate
       }
     }
+    state = dotProduct(opr, state);
   }
   if(invalid){
     document.getElementById('crt-code-qiskit').style.backgroundColor = 'red';
   }
   else{
     document.getElementById('crt-code-qiskit').style.backgroundColor = 'rgb(66, 66, 66)';
+    // analysis state
+    var normal_factor = 0;
+    var labels = [];
+    for(var i=0;i<state.length;i++){
+      normal_factor += Math.abs(state[i][0]);
+      if(state[i][0]!=0){
+        labels.push(decimalToBinary(i));
+      }
+    }
+    var percentage = [];
+    for(var i=0;i<labels.length;i++){
+      percentage.push((Math.abs(state[binaryToDecimal(labels[i])][0])*100)/normal_factor);
+    }
+    drawMeasurementProbablity(labels, percentage);
+    drawStateVector(state, normal_factor);
   }
 }
+function crossProduct(M1, M2){
+  var n1 = M1.length, n2 = M1[0].length, m1 = M2.length, m2 = M2[0].length;
+  var ans = [];
+  for(var i1=0;i1<n1;i1++){
+    for(var j1=0;j1<m1;j1++){
+      var x = [];
+      for(var i2=0;i2<n2;i2++){
+        for(var j2=0;j2<m2;j2++){
+          x.push(M1[i1][i2]*M2[j1][j2]);
+        }
+      }
+      ans.push(x);
+    }
+  }
+  return ans;
+}
+function dotProduct(M1, M2){
+  var n1 = M1.length, n2 = M1[0].length, m1 = M2.length, m2 = M2[0].length;
+  if(n2 === m1){
+    var ans = [];
+    for(var i1=0;i1<n1;i1++){
+      var x = [];
+      for(var j2=0;j2<m2;j2++){
+        var p = 0;
+        for(var i=0;i<n2;i++){
+          p += M1[i1][i]*M2[i][j2];
+        }
+        x.push(p);
+      }
+      ans.push(x);
+    }
+    return ans;
+  }
+  else{
+    console.log('Invalid Dot Product');
+  }
+}
+function decimalToBinary(x){
+  var ans = '';
+  for(var i=0;i<5;i++){
+    ans = String(parseInt(x%2)) + ans;
+    x = parseInt(x/2);
+  }
+  return ans;
+}
+function binaryToDecimal(x){
+  var ans=0,p=1;
+  for(var i=4;i>=0;i--){
+    ans += parseInt(x[i])*p;
+    p = p*2;
+  }
+  return ans;
+}
 
-var ctx = document.getElementById('crt-res-measure-prob').getContext('2d');
-var myChart = new Chart(ctx, {
+function drawMeasurementProbablity(l, p){
+  var mp = document.getElementById('result-container1');
+  while (mp.firstChild) {
+    mp.removeChild(mp.firstChild);
+  }
+  // <canvas height="240vh" id="crt-res-statevector"></canvas>
+  var can = document.createElement('CANVAS');
+  can.setAttribute('height', '265vh');
+  can.setAttribute('id', 'crt-res-measure-prob');
+  mp.appendChild(can);
+  var ctx = document.getElementById('crt-res-measure-prob').getContext('2d');
+  var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['00000', '00001', '00010', '00011'],
-        datasets: [{
-            label: 'Measurement Probabilities',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-        }]
+      labels: l,
+      datasets: [{
+        label: 'Measurement Probablities',
+          data: p,
+      }]
     },
     options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
-    }
-});
-
-var ctx = document.getElementById('crt-res-statevector').getContext('2d');
-var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: ['00000', '00001', '00010', '00011', '00100', '00101', '00110', '00111', '01000', '01001', '01010', '01011', '01100', '01101', '01110', '01111', '10000', '10001', '10010', '10011', '10100', '10101', '10110', '10111', '11000', '11001', '11010', '11011', '11100', '11101', '11110', '11111'],
-        datasets: [{
-            label: 'StateVector',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
         }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                }
-            }]
-        }
+      }
     }
-});
+  });
+}
+function drawStateVector(s, fac){
+  var i1 = document.getElementById('stv1');
+  var i2 = document.getElementById('stv2');
+  while (i1.firstChild) {
+    i1.removeChild(i1.firstChild);
+  }
+  while (i2.firstChild) {
+    i2.removeChild(i2.firstChild);
+  }
+  for(var i=0;i<16;i++){
+    var x = document.createElement('LI');
+    x.innerHTML = String(Math.sqrt(Math.abs(s[i][0])/fac));
+    i1.appendChild(x);
+  }
+  for(var i=16;i<32;i++){
+    var x = document.createElement('LI');
+    x.innerHTML = String(Math.sqrt(Math.abs(s[i][0])/fac));
+    i2.appendChild(x);
+  }
+}
