@@ -278,7 +278,7 @@ html body {
   overflow: auto;
   font-size: 13px;
   font-family: monospace;
-  padding-left: 2vw;
+  padding-left: 1vw;
 }
 #statevector2 {
   width: 12vw;
@@ -286,5 +286,5 @@ html body {
   overflow: auto;
   font-size: 13px;
   font-family: monospace;
-  padding-left: 1vw;
+  padding-left: 0.2vw;
 }

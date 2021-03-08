@@ -108,6 +108,7 @@ function showQiskit(){
   document.getElementById('crt-code-QASM').style.display = "none";
   slt_code = 0;
 }
+
 function allowDrop(ev) {
   ev.preventDefault();
 }
@@ -125,6 +126,8 @@ function drop(ev) {
   displayCode('qasm');
   runCircuit();
 }
+
+
 function displayCode(type) {
   if(type === 'qiskit'){
     while (qiskit.firstChild) {
@@ -186,6 +189,18 @@ function generateQiskitCode() {
       else if(opreations[j][i] === 'I'){
         def_code += '\nqc.id(q['+j+'])';
       }
+      else if(opreations[j][i] === 'R1'){
+        def_code += '\nqc.p(pi, q['+j+'])';
+      }
+      else if(opreations[j][i] === 'R2'){
+        def_code += '\nqc.p(pi/2, q['+j+'])';
+      }
+      else if(opreations[j][i] === 'R3'){
+        def_code += '\nqc.p(pi/4, q['+j+'])';
+      }
+      else if(opreations[j][i] === 'R4'){
+        def_code += '\nqc.p(pi/8, q['+j+'])';
+      }
       else if(opreations[j][i] === 'Mz'){
         def_code += '\nqc.measure(q['+j+'], c['+j+'])';
       }
@@ -215,6 +230,394 @@ function generateQiskitCode() {
     document.getElementById('crt-code-qiskit').style.backgroundColor = 'rgb(66, 66, 66)';
   }
   qiskit_code = def_code;
+}
+function compileQiskit(val) {
+  var code = val.replace('<div contenteditable="false">from qiskit import *<br></div><div contenteditable="false"><br></div><div contenteditable="false">q = QuantumRegister(4, "q")<br></div><div contenteditable="false">c = ClassicalRegister(4, "c")<br></div><div contenteditable="false">qc = QuantumCircuit(q, c)<br></div>', '').replace(/<\/div>/g, '?').replace(/div|<|>|br|&nbsp;/g, '').split('?');
+  var invalid = false;
+  document.querySelectorAll('.qubit').forEach((q) => {
+    q.querySelectorAll('.qubit-gate').forEach((qg) => {
+      qg.innerHTML = '--';
+      qg.setAttribute('style', "background-color: rgb(218, 218, 218);");
+    });
+  });
+  for(var c in code){
+    if(code[c] === '')
+      continue
+    var line = code[c];
+    // opreations: h,x,r,p,i,c
+    if(line.length>=10){
+      var opr = line[3];
+      // console.log(opr);
+      switch(opr) {
+        case 'h': // qc.h(q[j]), rgb(255, 204, 64)
+          if(line.length === 10){
+            var q = parseInt(line[7]);
+            if(isNaN(q) || q>4 || (line.replace('qc.h(q[', ':').replace('])', ':') !== ':'+line[7]+':')){
+              invalid = true;
+              break;
+            }
+            else{
+              var found=false;
+              document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                if(qg.innerHTML === '--' && found === false){
+                  qg.innerHTML = 'H';
+                  qg.setAttribute('style', "background-color: rgb(255, 204, 64);");
+                  found = true
+                }
+              });
+              if(found === false){
+                invalid = true;
+              }
+            }
+          }
+          break;
+        case 'x': // qc.x(q[j]), rgb(255, 117, 37)
+          if(line.length === 10){
+            var q = parseInt(line[7]);
+            if(isNaN(q) || q>4 || (line.replace('qc.x(q[', ':').replace('])', ':') !== ':'+line[7]+':')){
+              invalid = true;
+              break;
+            }
+            else{
+              var found=false;
+              document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                if(qg.innerHTML === '--' && found === false){
+                  qg.innerHTML = 'X';
+                  qg.setAttribute('style', "background-color: rgb(255, 117, 37);");
+                  found = true
+                }
+              });
+              if(found === false){
+                invalid = true;
+              }
+            }
+          }
+          break;
+        case 'r': // qc.reset(q[j]), black
+          if(line.length === 14){
+            var q = parseInt(line[11]);
+            if(isNaN(q) || q>4 || (line.replace('qc.reset(q[', ':').replace('])', ':') !== ':'+line[11]+':')){
+              invalid = true;
+              break;
+            }
+            else{
+              var found=false;
+              document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                if(qg.innerHTML === '--' && found === false){
+                  qg.innerHTML = '|0>';
+                  qg.setAttribute('style', "background-color: black;");
+                  found = true
+                }
+              });
+              if(found === false){
+                invalid = true;
+              }
+            }
+          }
+          break;
+        case 'i': // qc.id(q[j]), rgb(195, 209, 255)
+          if(line.length === 11){
+            var q = parseInt(line[8]);
+            if(isNaN(q) || q>4 || (line.replace('qc.id(q[', ':').replace('])', ':') !== ':'+line[8]+':')){
+              invalid = true;
+              break;
+            }
+            else{
+              var found=false;
+              document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                if(qg.innerHTML === '--' && found === false){
+                  qg.innerHTML = 'I';
+                  qg.setAttribute('style', "background-color: rgb(195, 209, 255);");
+                  found = true
+                }
+              });
+              if(found === false){
+                invalid = true;
+              }
+            }
+          }
+          break;
+        case 'c': // qc.cx(q[i], q[j]), rgb(255, 94, 0)
+          if(line.length === 17){
+            var q = parseInt(line[8]), p = parseInt(line[14]);
+            if(isNaN(q) || isNaN(p) || p>4 || q>4 || p===q || (line.replace('qc.cx(q[', ':').replace('], q[', ':').replace('])', ':') !== ':'+line[8]+':'+line[14]+':')){
+              invalid = true;
+              break;
+            }
+            else{
+              var found=false,cx=-1,as=-1,i=0;
+              document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                if(qg.innerHTML === '--' && found === false){
+                  cx = i;
+                  found = true
+                }
+                i+=1;
+              });
+              if(found === false){
+                invalid = true;
+              }
+              found = false;
+              i = 0;
+              document.querySelectorAll('.qubit')[p].querySelectorAll('.qubit-gate').forEach((qg) => {
+                if(qg.innerHTML === '--' && found === false){
+                  as = i;
+                  found = true
+                }
+                i+=1;
+              });
+              if(found === false){
+                invalid = true;
+              }
+              i = Math.max(as, cx);
+              document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate')[i].innerHTML = '*';
+              document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate')[i].setAttribute('style', "background-color: rgb(165, 165, 165);");
+              document.querySelectorAll('.qubit')[p].querySelectorAll('.qubit-gate')[i].innerHTML = 'CX';
+              document.querySelectorAll('.qubit')[p].querySelectorAll('.qubit-gate')[i].setAttribute('style', "background-color: rgb(255, 94, 0);");
+            }
+          }
+          else if(line.length === 16){
+            var q = parseInt(line[8]), p = parseInt(line[13]);
+            if(isNaN(q) || isNaN(p) || p>4 || q>4 || p===q || (line.replace('qc.cx(q[', ':').replace('],q[', ':').replace('])', ':') !== ':'+line[8]+':'+line[13]+':')){
+              console.log('res');
+              invalid = true;
+              break;
+            }
+            else{
+              var found=false,cx=-1,as=-1,i=0;
+              document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                if(qg.innerHTML === '--' && found === false){
+                  cx = i;
+                  found = true
+                }
+                i+=1;
+              });
+              if(found === false){
+                invalid = true;
+              }
+              found = false;
+              i = 0;
+              document.querySelectorAll('.qubit')[p].querySelectorAll('.qubit-gate').forEach((qg) => {
+                if(qg.innerHTML === '--' && found === false){
+                  as = i;
+                  found = true
+                }
+                i+=1;
+              });
+              if(found === false){
+                invalid = true;
+              }
+              i = Math.max(as, cx);
+              document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate')[i].innerHTML = '*';
+              document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate')[i].setAttribute('style', "background-color: rgb(165, 165, 165);");
+              document.querySelectorAll('.qubit')[p].querySelectorAll('.qubit-gate')[i].innerHTML = 'CX';
+              document.querySelectorAll('.qubit')[p].querySelectorAll('.qubit-gate')[i].setAttribute('style', "background-color: rgb(255, 94, 0);");
+            }
+          }
+          break;
+        case 'p': // qc.p(pi, q[j]), 
+          if(line.length >= 13){
+            var angle_frac = line.split('pi')[1][0] === '\/'?parseInt(line.split('pi')[1][1]):1;
+            if(angle_frac === 1){ // R1 qc.p(pi, q[j]), 
+              if(line.replace('qc.p(pi,', ':').replace('])', ':').replace('q[', ':') === ': :'+line[11]+':'){
+                var q = parseInt(line[11]);
+                if(isNaN(q) || q>4){
+                  invalid = true;
+                }
+                else{
+                  var found=false;
+                  document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                    if(qg.innerHTML === '--' && found === false){
+                      qg.innerHTML = 'R1';
+                      qg.setAttribute('style', "background-color: rgb(158, 255, 78);");
+                      found = true
+                    }
+                  });
+                }
+              }
+              else if(line.replace('qc.p(pi,', ':').replace('])', ':').replace('q[', ':') === '::'+line[10]+':'){
+                var q = parseInt(line[10]);
+                if(isNaN(q) || q>4){
+                  invalid = true;
+                }
+                else{
+                  var found=false;
+                  document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                    if(qg.innerHTML === '--' && found === false){
+                      qg.innerHTML = 'R1';
+                      qg.setAttribute('style', "background-color: rgb(158, 255, 78);");
+                      found = true
+                    }
+                  });
+                }
+              }
+              else if(line.replace('qc.p(pi/1,', ':').replace('])', ':').replace('q[', ':') === ': :'+line[13]+':'){
+                var q = parseInt(line[13]);
+                if(isNaN(q) || q>4){
+                  invalid = true;
+                }
+                else{
+                  var found=false;
+                  document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                    if(qg.innerHTML === '--' && found === false){
+                      qg.innerHTML = 'R1';
+                      qg.setAttribute('style', "background-color: rgb(158, 255, 78);");
+                      found = true
+                    }
+                  });
+                }
+              }
+              else if(line.replace('qc.p(pi/1,', ':').replace('])', ':').replace('q[', ':') === '::'+line[12]+':'){
+                var q = parseInt(line[12]);
+                if(isNaN(q) || q>4){
+                  invalid = true;
+                }
+                else{
+                  var found=false;
+                  document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                    if(qg.innerHTML === '--' && found === false){
+                      qg.innerHTML = 'R1';
+                      qg.setAttribute('style', "background-color: rgb(158, 255, 78);");
+                      found = true
+                    }
+                  });
+                }
+              }
+              else{
+                invalid = true;
+              }
+            }
+            else if(angle_frac === 2){ // qc.p(pi/2, q[j]), 
+              console.log('pop');
+              if(line.replace('qc.p(pi/2,', ':').replace('])', ':').replace('q[', ':') === ': :'+line[13]+':'){
+                var q = parseInt(line[13]);
+                if(isNaN(q) || q>4){
+                  invalid = true;
+                }
+                else{
+                  var found=false;
+                  document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                    if(qg.innerHTML === '--' && found === false){
+                      qg.innerHTML = 'R2';
+                      qg.setAttribute('style', "background-color: rgb(108, 255, 78);");
+                      found = true
+                    }
+                  });
+                }
+              }
+              else if(line.replace('qc.p(pi/2,', ':').replace('])', ':').replace('q[', ':') === '::'+line[12]+':'){
+                var q = parseInt(line[12]);
+                if(isNaN(q) || q>4){
+                  invalid = true;
+                }
+                else{
+                  var found=false;
+                  document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                    if(qg.innerHTML === '--' && found === false){
+                      qg.innerHTML = 'R2';
+                      qg.setAttribute('style', "background-color: rgb(108, 255, 78);");
+                      found = true
+                    }
+                  });
+                }
+              }
+              else{
+                invalid = true;
+              }
+            }
+            else if(angle_frac === 4){
+              if(line.replace('qc.p(pi/4,', ':').replace('])', ':').replace('q[', ':') === ': :'+line[13]+':'){
+                var q = parseInt(line[13]);
+                if(isNaN(q) || q>4){
+                  invalid = true;
+                }
+                else{
+                  var found=false;
+                  document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                    if(qg.innerHTML === '--' && found === false){
+                      qg.innerHTML = 'R3';
+                      qg.setAttribute('style', "background-color: rgb(69, 255, 52);");
+                      found = true
+                    }
+                  });
+                }
+              }
+              else if(line.replace('qc.p(pi/4,', ':').replace('])', ':').replace('q[', ':') === '::'+line[12]+':'){
+                var q = parseInt(line[12]);
+                if(isNaN(q) || q>4){
+                  invalid = true;
+                }
+                else{
+                  var found=false;
+                  document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                    if(qg.innerHTML === '--' && found === false){
+                      qg.innerHTML = 'R3';
+                      qg.setAttribute('style', "background-color: rgb(69, 255, 52);");
+                      found = true
+                    }
+                  });
+                }
+              }
+              else{
+                invalid = true;
+              }
+            }
+            else if(angle_frac === 8){
+              if(line.replace('qc.p(pi/8,', ':').replace('])', ':').replace('q[', ':') === ': :'+line[13]+':'){
+                var q = parseInt(line[13]);
+                if(isNaN(q) || q>4){
+                  invalid = true;
+                }
+                else{
+                  var found=false;
+                  document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                    if(qg.innerHTML === '--' && found === false){
+                      qg.innerHTML = 'R4';
+                      qg.setAttribute('style', "background-color: rgb(0, 255, 13);");
+                      found = true
+                    }
+                  });
+                }
+              }
+              else if(line.replace('qc.p(pi/8,', ':').replace('])', ':').replace('q[', ':') === '::'+line[12]+':'){
+                var q = parseInt(line[12]);
+                if(isNaN(q) || q>4){
+                  invalid = true;
+                }
+                else{
+                  var found=false;
+                  document.querySelectorAll('.qubit')[q].querySelectorAll('.qubit-gate').forEach((qg) => {
+                    if(qg.innerHTML === '--' && found === false){
+                      qg.innerHTML = 'R4';
+                      qg.setAttribute('style', "background-color: rgb(0, 255, 13);");
+                      found = true
+                    }
+                  });
+                }
+              }
+              else{
+                invalid = true;
+              }
+            }
+            else{
+              invalid = true;
+            }
+            
+          }
+          break;
+        default:
+          invalid = true;
+      }
+    }
+    else{
+      invalid = true;
+    }
+  }
+  if(invalid){
+    document.getElementById('crt-code-qiskit').style.backgroundColor = 'red';
+  }
+  else{
+    document.getElementById('crt-code-qiskit').style.backgroundColor = 'rgb(66, 66, 66)';
+  }
 }
 function generateQASMCode() {
   var def_code = 'OPENQASM 2.0;\ninclude "qelib1.inc";\n\nqreg q[4];\ncreg c[4];\n';
@@ -246,6 +649,18 @@ function generateQASMCode() {
       else if(opreations[j][i] === 'I'){
         def_code += '\nid q['+j+'];';
       }
+      else if(opreations[j][i] === 'R1'){
+        def_code += '\np(pi) q['+j+'];';
+      }
+      else if(opreations[j][i] === 'R2'){
+        def_code += '\np(pi/2)  q['+j+'];';
+      }
+      else if(opreations[j][i] === 'R3'){
+        def_code += '\np(pi/4)  q['+j+'];';
+      }
+      else if(opreations[j][i] === 'R4'){
+        def_code += '\np(pi/8)  q['+j+'];';
+      }
       else if(opreations[j][i] === 'Mz'){
         def_code += '\nmeasure q['+j+'] -> c['+j+'];';
       }
@@ -276,6 +691,33 @@ function generateQASMCode() {
   }
   qasm_code = def_code;
 }
+function compileQASM(val) {
+  var code = val.replace('<div contenteditable="false">OPENQASM 2.0;<br></div><div contenteditable="false">include "qelib1.inc";<br></div><div contenteditable="false"><br></div><div contenteditable="false">qreg q[4];<br></div><div contenteditable="false">creg c[4];<br></div>', '').replace(/div|<|>|br|&nbsp;/g, '').split('/');
+  for(var c in code){
+    if(code[c] === '')
+      continue
+    console.log(code[c]);
+  }
+}
+
+function copyCode() {
+  if(slt_code === 0) { // qiskit-code
+    navigator.clipboard.writeText(qiskit_code).then(function() {
+      console.log('Async: Copying to clipboard was successful!');
+    }, function(err) {
+      console.error('Async: Could not copy text: ', err);
+    });
+  }
+  else if(slt_code === 1) { // qasm-code
+    navigator.clipboard.writeText(qasm_code).then(function() {
+      console.log('Async: Copying to clipboard was successful!');
+    }, function(err) {
+      console.error('Async: Could not copy text: ', err);
+    });
+  }
+}
+
+
 function runCircuit() {
   var opreations = [];
   document.getElementById('crt-crt-crt-qubit').querySelectorAll('.qubit').forEach((qubit) => {
@@ -564,7 +1006,7 @@ function runCircuit() {
       percentage.push((state[binaryToDecimal(labels[i])][0].modulus()*100)/normal_factor);
     }
     drawMeasurementProbablity(labels, percentage);
-    drawStateVector(state, normal_factor);
+    drawStateVector(state, Math.sqrt(normal_factor));
   }
 }
 function cnot(middleopr, type) {  // create matrix of opreation b/w cnot implementation
@@ -616,7 +1058,7 @@ function dotProduct(M1, M2){
         var r = 0, img=0;
         for(var i=0;i<n2;i++){ // M1[i1][i]*M2[i][j2];
           r += M1[i1][i].real*M2[i][j2].real - M1[i1][i].img*M2[i][j2].img;
-          img += M1[i1][i].real*M2[i][j2].img - M1[i1][i].img*M2[i][j2].real;
+          img += M1[i1][i].real*M2[i][j2].img + M1[i1][i].img*M2[i][j2].real;
         }
         x.push(new Com(r, img));
       }
@@ -686,47 +1128,23 @@ function drawStateVector(s, fac){
     i2.removeChild(i2.firstChild);
   }
   for(var i=0;i<16;i++){
+    var sign = '+';
+    if((s[i][0].img/fac).toFixed(3)<0){
+      console.log(s[i][0]);
+      sign = '-';
+    }
     var x = document.createElement('LI');
-    x.innerHTML = String(Math.sqrt(s[i][0].modulus()/fac).toFixed(5));
+    x.innerHTML = String((s[i][0].real/fac).toFixed(3)) + sign + String(Math.abs(s[i][0].img/fac).toFixed(3)) + 'j';
     i1.appendChild(x);
   }
   for(var i=16;i<32;i++){
+    var sign = '+';
+    if(s[i][0].img<0){
+      sign = '-';
+    }
     var x = document.createElement('LI');
-    x.innerHTML = String(Math.sqrt(s[i][0].modulus()/fac).toFixed(5));
+    x.innerHTML = String((s[i][0].real/fac).toFixed(3)) + sign + String(Math.abs(s[i][0].img/fac).toFixed(3)) + 'j';
     i2.appendChild(x);
-  }
-}
-
-function copyCode() {
-  if(slt_code === 0) { // qiskit-code
-    navigator.clipboard.writeText(qiskit_code).then(function() {
-      console.log('Async: Copying to clipboard was successful!');
-    }, function(err) {
-      console.error('Async: Could not copy text: ', err);
-    });
-  }
-  else if(slt_code === 1) { // qasm-code
-    navigator.clipboard.writeText(qasm_code).then(function() {
-      console.log('Async: Copying to clipboard was successful!');
-    }, function(err) {
-      console.error('Async: Could not copy text: ', err);
-    });
-  }
-}
-function compileQiskit(val) {
-  var code = val.replace('<div contenteditable="false">from qiskit import *<br></div><div contenteditable="false"><br></div><div contenteditable="false">q = QuantumRegister(4, "q")<br></div><div contenteditable="false">c = ClassicalRegister(4, "c")<br></div><div contenteditable="false">qc = QuantumCircuit(q, c)<br></div>', '').replace(/div|<|>|br|&nbsp;/g, '').split('/');
-  for(var c in code){
-    if(code[c] === '')
-      continue
-    console.log(code[c]);
-  }
-}
-function compileQASM(val) {
-  var code = val.replace('<div contenteditable="false">OPENQASM 2.0;<br></div><div contenteditable="false">include "qelib1.inc";<br></div><div contenteditable="false"><br></div><div contenteditable="false">qreg q[4];<br></div><div contenteditable="false">creg c[4];<br></div>', '').replace(/div|<|>|br|&nbsp;/g, '').split('/');
-  for(var c in code){
-    if(code[c] === '')
-      continue
-    console.log(code[c]);
   }
 }
 
