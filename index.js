@@ -1,3 +1,19 @@
+class Com {
+  constructor(real, img) {
+    this.real = real;
+    this.img = img;
+  }
+  useangle(angle) {
+    this.real = Math.cos(angle);
+    this.img = Math.sin(angle);
+    return this;
+  }
+  modulus() {
+    let mod = (this.real*this.real) + (this.img*this.img);
+    return mod;
+  }
+}
+
 var open_nav = 0;
 var slt_item = 0;
 var slt_code = 0;
@@ -11,18 +27,31 @@ document.querySelectorAll('.crt-code-head-item')[slt_code].style.borderBottom = 
 document.getElementById('crt-code-qiskit').style.display = "block";
 document.getElementById('crt-code-QASM').style.display = "none";
 
-var qiskit_code = document.getElementById('crt-code-qiskit');
-var qasm_code = document.getElementById('crt-code-QASM');
+var qiskit = document.getElementById('crt-code-qiskit');
+var qasm = document.getElementById('crt-code-QASM');
 
-qiskit_code.appendChild(defaultQiskitCode())
-qasm_code.appendChild(defaultQASMCode())
+var qiskit_code ,qasm_code ;
 
-var zero = [[1], [0]];
-var one = [[0], [1]];
-var H = [[1, 1], [1, -1]];
-var X = [[0, 1], [1, 0]];
-var I = [[1, 0], [0, 1]];
-var reset = [[1, 1], [0, 0]];
+generateQiskitCode();
+generateQASMCode();
+
+displayCode('qiskit');
+displayCode('qasm');
+
+var zero = [[new Com(1 , 0)], [new Com(0 , 0)]];
+var one = [[new Com(0 , 0)], [new Com(1 , 0)]];
+var H = [[new Com(1 , 0), new Com(1 , 0)], [new Com(1 , 0), new Com(-1 , 0)]];
+var X = [[new Com(0 , 0), new Com(1 , 0)], [new Com(1 , 0), new Com(0 , 0)]];
+var I = [[new Com(1 , 0), new Com(0 , 0)], [new Com(0 , 0), new Com(1 , 0)]];
+var reset = [[new Com(1 , 0), new Com(1 , 0)], [new Com(0 , 0), new Com(0 , 0)]];
+
+var favCNOT = [[new Com(1 , 0), new Com(0 , 0), new Com(0 , 0), new Com(0 , 0)], [new Com(0 , 0), new Com(1 , 0), new Com(0 , 0), new Com(0 , 0)], [new Com(0 , 0), new Com(0 , 0), new Com(0 , 0), new Com(1 , 0)], [new Com(0 , 0), new Com(0 , 0), new Com(1 , 0), new Com(0 , 0)]]; // [[I, 0], [0, X]], lower bit is controlled by higher bit
+var unfavCNOT =  [[new Com(1 , 0), new Com(0 , 0), new Com(0 , 0), new Com(0 , 0)], [new Com(0 , 0), new Com(0 , 0), new Com(0 , 0), new Com(1 , 0)], [new Com(0 , 0), new Com(0 , 0), new Com(1 , 0), new Com(0 , 0)], [new Com(0 , 0), new Com(1 , 0), new Com(0 , 0), new Com(0 , 0)]]; // higher bit is controlled by lower bit
+
+var R1 = [[new Com(1 , 0), new Com(0 , 0)], [new Com(0 , 0), new Com(0, 0).useangle(Math.PI)]];
+var R2 = [[new Com(1 , 0), new Com(0 , 0)], [new Com(0 , 0), new Com(0, 0).useangle(Math.PI/2)]];
+var R3 = [[new Com(1 , 0), new Com(0 , 0)], [new Com(0 , 0), new Com(0, 0).useangle(Math.PI/4)]];
+var R4 = [[new Com(1 , 0), new Com(0 , 0)], [new Com(0 , 0), new Com(0, 0).useangle(Math.PI/8)]];
 
 runCircuit();
 
@@ -90,81 +119,45 @@ function drop(ev) {
   ev.preventDefault();
   ev.target.style.backgroundColor = ev.dataTransfer.getData("color");
   ev.target.innerHTML = ev.dataTransfer.getData("opreation");
-  writeQiskitCode();
+  generateQiskitCode();
+  displayCode('qiskit');
+  generateQASMCode();
+  displayCode('qasm');
   runCircuit();
 }
-function defaultQiskitCode() {
-  // <ol>
-  //   <li class="crt-code-qiskit-line">from qiskit import *</li>
-  //   <li class="crt-code-qiskit-line"></li>
-  //   <li class="crt-code-qiskit-line">q = QuantumRegister(4, 'q')</li>
-  //   <li class="crt-code-qiskit-line">c = ClassicalRegister(4, 'c')</li>
-  //   <li class="crt-code-qiskit-line">qc = QuantumCircuit(q, c)</li>
-  // </ol>
-  var elem = document.createElement('OL');
-  var i1 = document.createElement('LI');
-  var i2 = document.createElement('LI');
-  var i3 = document.createElement('LI');
-  var i4 = document.createElement('LI');
-  var i5 = document.createElement('LI');
-  var i6 = document.createElement('LI');
-
-  i1.innerHTML = 'from qiskit import *';
-  i2.innerHTML = '';
-  i3.innerHTML = "q = QuantumRegister(4, 'q')";
-  i4.innerHTML = "c = ClassicalRegister(4, 'c')";
-  i5.innerHTML = "qc = QuantumCircuit(q, c)";
-  i6.innerHTML = '';
-  i1.setAttribute('class', 'crt-code-qiskit-line');
-  i2.setAttribute('class', 'crt-code-qiskit-line');
-  i3.setAttribute('class', 'crt-code-qiskit-line');
-  i4.setAttribute('class', 'crt-code-qiskit-line');
-  i5.setAttribute('class', 'crt-code-qiskit-line');
-  i6.setAttribute('class', 'crt-code-qiskit-line');
-
-  elem.appendChild(i1);
-  elem.appendChild(i2);
-  elem.appendChild(i3);
-  elem.appendChild(i4);
-  elem.appendChild(i5);
-  elem.appendChild(i6);
-  return elem;
+function displayCode(type) {
+  if(type === 'qiskit'){
+    while (qiskit.firstChild) {
+      qiskit.removeChild(qiskit.firstChild);
+    }
+    var code = qiskit_code.split('\n');
+  }
+  else if(type === 'qasm'){
+    while (qasm.firstChild) {
+      qasm.removeChild(qasm.firstChild);
+    }
+    var code = qasm_code.split('\n');
+  }
+  for(var c in code){
+    var e = document.createElement('BR');
+    var d = document.createElement('DIV');
+    if(c<5){
+      d.setAttribute('contenteditable', 'false');
+    }
+    if(type === 'qiskit'){
+      d.innerHTML = code[c];
+      d.appendChild(e);
+      qiskit.appendChild(d);
+    }
+    else if(type === 'qasm'){
+      d.innerHTML = code[c];
+      d.appendChild(e);
+      qasm.appendChild(d);
+    }
+  }
 }
-function defaultQASMCode() {
-  // <ol>
-  //   <li>OPENQASM 2.0;</li>
-  //   <li>include "qelib1.inc";</li>
-  //   <li></li>
-  //   <li>qreg q[4];</li>
-  //   <li>creg c[4];</li>
-  // </ol>
-  var elem = document.createElement('OL');
-  var i1 = document.createElement('LI');
-  var i2 = document.createElement('LI');
-  var i3 = document.createElement('LI');
-  var i4 = document.createElement('LI');
-  var i5 = document.createElement('LI');
-
-  i1.innerHTML = 'OPENQASM 2.0;';
-  i2.innerHTML = 'include "qelib1.inc";';
-  i3.innerHTML = "";
-  i4.innerHTML = "qreg q[4];";
-  i5.innerHTML = "creg c[4];";
-  i1.setAttribute('class', 'crt-code-qasm-line');
-  i2.setAttribute('class', 'crt-code-qasm-line');
-  i3.setAttribute('class', 'crt-code-qasm-line');
-  i4.setAttribute('class', 'crt-code-qasm-line');
-  i5.setAttribute('class', 'crt-code-qasm-line');
-
-  elem.appendChild(i1);
-  elem.appendChild(i2);
-  elem.appendChild(i3);
-  elem.appendChild(i4);
-  elem.appendChild(i5);
-  return elem;
-}
-function writeQiskitCode() {
-  var def_code = defaultQiskitCode();
+function generateQiskitCode() {
+  var def_code = 'from qiskit import *\n\nq = QuantumRegister(4, "q")\nc = ClassicalRegister(4, "c")\nqc = QuantumCircuit(q, c)\n';
   var opreations = [];
   document.getElementById('crt-crt-crt-qubit').querySelectorAll('.qubit').forEach((qubit) => {
     var op = [];
@@ -182,34 +175,19 @@ function writeQiskitCode() {
     var dot=[],cx=[];
     for(var j = 0; j<5;j++){
       if(opreations[j][i] === 'H'){
-        var l = document.createElement('LI');
-        l.innerHTML = 'qc.h(q['+j+'])';
-        l.setAttribute('class', 'crt-code-qiskit-line');
-        def_code.appendChild(l);
+        def_code += '\nqc.h(q['+j+'])';
       }
       else if(opreations[j][i] === 'X'){
-        var l = document.createElement('LI');
-        l.innerHTML = 'qc.x(q['+j+'])';
-        l.setAttribute('class', 'crt-code-qiskit-line');
-        def_code.appendChild(l);
+        def_code += '\nqc.x(q['+j+'])';
       }
       else if(opreations[j][i] === '0'){
-        var l = document.createElement('LI');
-        l.innerHTML = 'qc.reset(q['+j+'])';
-        l.setAttribute('class', 'crt-code-qiskit-line');
-        def_code.appendChild(l);
+        def_code += '\nqc.reset(q['+j+'])';
       }
       else if(opreations[j][i] === 'I'){
-        var l = document.createElement('LI');
-        l.innerHTML = 'qc.id(q['+j+'])';
-        l.setAttribute('class', 'crt-code-qiskit-line');
-        def_code.appendChild(l);
+        def_code += '\nqc.id(q['+j+'])';
       }
       else if(opreations[j][i] === 'Mz'){
-        var l = document.createElement('LI');
-        l.innerHTML = 'qc.measure(q['+j+'], c['+j+'])';
-        l.setAttribute('class', 'crt-code-qiskit-line');
-        def_code.appendChild(l);
+        def_code += '\nqc.measure(q['+j+'], c['+j+'])';
       }
       else if(opreations[j][i] === '*'){
         dot.push(j);
@@ -226,10 +204,7 @@ function writeQiskitCode() {
         invalid = true;
       }
       else{
-        var l = document.createElement('LI');
-        l.innerHTML = 'qc.cx(q['+dot[0]+'], q['+cx[0]+'])';
-        l.setAttribute('class', 'crt-code-qiskit-line');
-        def_code.appendChild(l);
+        def_code += '\nqc.cx(q['+dot[0]+'], q['+cx[0]+'])';
       }
     }
   }
@@ -239,10 +214,67 @@ function writeQiskitCode() {
   else{
     document.getElementById('crt-code-qiskit').style.backgroundColor = 'rgb(66, 66, 66)';
   }
-  while (qiskit_code.firstChild) {
-    qiskit_code.removeChild(qiskit_code.firstChild);
+  qiskit_code = def_code;
+}
+function generateQASMCode() {
+  var def_code = 'OPENQASM 2.0;\ninclude "qelib1.inc";\n\nqreg q[4];\ncreg c[4];\n';
+  var opreations = [];
+  document.getElementById('crt-crt-crt-qubit').querySelectorAll('.qubit').forEach((qubit) => {
+    var op = [];
+    qubit.querySelectorAll('.qubit-gate').forEach((g) => {
+      var o = g.innerHTML;
+      if(o === "|0&gt;"){
+        o = '0';
+      }
+      op.push(o);
+    });
+    opreations.push(op);
+  });
+  var invalid = false;
+  for(var i = 0; i<15;i++){
+    var dot=[],cx=[];
+    for(var j = 0; j<5;j++){
+      if(opreations[j][i] === 'H'){
+        def_code += '\nh q['+j+'];';
+      }
+      else if(opreations[j][i] === 'X'){
+        def_code += '\nx q['+j+'];';
+      }
+      else if(opreations[j][i] === '0'){
+        def_code += '\nreset q['+j+'];';
+      }
+      else if(opreations[j][i] === 'I'){
+        def_code += '\nid q['+j+'];';
+      }
+      else if(opreations[j][i] === 'Mz'){
+        def_code += '\nmeasure q['+j+'] -> c['+j+'];';
+      }
+      else if(opreations[j][i] === '*'){
+        dot.push(j);
+      }
+      else if(opreations[j][i] === 'CX'){
+        cx.push(j);
+      }
+      else if(opreations[j][i] === 'CCX'){
+        ccx.push(j);
+      }
+    }
+    if(cx.length === 1){
+      if(dot.length !== 1){
+        invalid = true;
+      }
+      else{
+        def_code += '\ncx q['+dot[0]+'], q['+cx[0]+'];';
+      }
+    }
   }
-  qiskit_code.appendChild(def_code);
+  if(invalid){
+    document.getElementById('crt-code-QASM').style.backgroundColor = 'red';
+  }
+  else{
+    document.getElementById('crt-code-QASM').style.backgroundColor = 'rgb(66, 66, 66)';
+  }
+  qasm_code = def_code;
 }
 function runCircuit() {
   var opreations = [];
@@ -257,73 +289,258 @@ function runCircuit() {
     });
     opreations.push(op);
   });
-  var state = crossProduct(zero, zero)
+  var state = crossProduct(zero, zero);
   for(var i=0;i<3;i++){
     state = crossProduct(zero, state);
   }
   var invalid = false;
   for(var i = 0; i<15;i++){
-    var dot=[],cx=[],opr=[];
+    var dot=[],cx=[],opr=[], sopr=[], cflag=0, cnt_empty=0;
     for(var j = 0; j<5;j++){
       if(opreations[j][i] === 'H'){
-        if(opr.length === 0){
-          opr = H;
+        if(cflag === 0){
+          if(opr.length === 0){
+            opr = H;
+          }
+          else{
+            opr = crossProduct(H, opr);
+          }
+        }
+        else if(cflag > 0){
+          if(sopr.length === 0){
+            sopr = H;
+          }
+          else{
+            sopr = crossProduct(H, sopr);
+          }
         }
         else{
-          opr = crossProduct(H, opr);
+          invalid = true;
         }
       }
       else if(opreations[j][i] === 'X'){
-        if(opr.length === 0){
-          opr = X;
+        if(cflag === 0){
+          if(opr.length === 0){
+            opr = X;
+          }
+          else{
+            opr = crossProduct(X, opr);
+          }
+        }
+        else if(cflag > 0){
+          if(sopr.length === 0){
+            sopr = X;
+          }
+          else{
+            sopr = crossProduct(X, sopr);
+          }
         }
         else{
-          opr = crossProduct(X, opr);
+          invalid = true;
         }
       }
       else if(opreations[j][i] === '0'){
-        if(opr.length === 0){
-          opr = reset;
+        if(cflag === 0){
+          if(opr.length === 0){
+            opr = reset;
+          }
+          else{
+            opr = crossProduct(reset, opr);
+          }
+        }
+        else if(cflag > 0){
+          if(sopr.length === 0){
+            sopr = reset;
+          }
+          else{
+            sopr = crossProduct(reset, sopr);
+          }
         }
         else{
-          opr = crossProduct(reset, opr);
+          invalid = true;
         }
       }
       else if(opreations[j][i] === 'I'){
-        if(opr.length === 0){
-          opr = I;
+        if(cflag === 0){
+          if(opr.length === 0){
+            opr = I;
+          }
+          else{
+            opr = crossProduct(I, opr);
+          }
+        }
+        else if(cflag > 0){
+          if(sopr.length === 0){
+            sopr = I;
+          }
+          else{
+            sopr = crossProduct(I, sopr);
+          }
         }
         else{
-          opr = crossProduct(I, opr);
+          invalid = true;
         }
       }
       else if(opreations[j][i] === '--'){
-        if(opr.length === 0){
-          opr = I;
+        if(cflag === 0){
+          if(opr.length === 0){
+            opr = I;
+          }
+          else{
+            opr = crossProduct(I, opr);
+          }
+        }
+        else if(cflag > 0){
+          if(sopr.length === 0){
+            sopr = I;
+          }
+          else{
+            sopr = crossProduct(I, sopr);
+          }
         }
         else{
-          opr = crossProduct(I, opr);
+          invalid = true;
+        }
+        cnt_empty+=1;
+      }
+      else if(opreations[j][i] === 'R1'){
+        if(cflag === 0){
+          if(opr.length === 0){
+            opr = R1;
+          }
+          else{
+            opr = crossProduct(R1, opr);
+          }
+        }
+        else if(cflag > 0){
+          if(sopr.length === 0){
+            sopr = R1;
+          }
+          else{
+            sopr = crossProduct(R1, sopr);
+          }
+        }
+        else{
+          invalid = true;
+        }
+      }
+      else if(opreations[j][i] === 'R2'){
+        if(cflag === 0){
+          if(opr.length === 0){
+            opr = R2;
+          }
+          else{
+            opr = crossProduct(R2, opr);
+          }
+        }
+        else if(cflag > 0){
+          if(sopr.length === 0){
+            sopr = R2;
+          }
+          else{
+            sopr = crossProduct(R2, sopr);
+          }
+        }
+        else{
+          invalid = true;
+        }
+      }
+      else if(opreations[j][i] === 'R3'){
+        if(cflag === 0){
+          if(opr.length === 0){
+            opr = R3;
+          }
+          else{
+            opr = crossProduct(R3, opr);
+          }
+        }
+        else if(cflag > 0){
+          if(sopr.length === 0){
+            sopr = R3;
+          }
+          else{
+            sopr = crossProduct(R3, sopr);
+          }
+        }
+        else{
+          invalid = true;
+        }
+      }
+      else if(opreations[j][i] === 'R4'){
+        if(cflag === 0){
+          if(opr.length === 0){
+            opr = R4;
+          }
+          else{
+            opr = crossProduct(R4, opr);
+          }
+        }
+        else if(cflag > 0){
+          if(sopr.length === 0){
+            sopr = R4;
+          }
+          else{
+            sopr = crossProduct(R4, sopr);
+          }
+        }
+        else{
+          invalid = true;
         }
       }
       else if(opreations[j][i] === 'Mz'){
       }
       else if(opreations[j][i] === '*'){
+        if(cflag>0){
+          sopr = cnot(sopr, 'fav');
+          if(opr.length === 0){
+            opr = sopr;
+          }
+          else{
+            opr = crossProduct(sopr, opr);
+          }
+          sopr = [];
+          cflag -= 1;
+        }
+        else if(cflag === 0){
+          cflag -= 1;
+        }
+        else{
+          invalid = true;
+        }
         dot.push(j);
       }
       else if(opreations[j][i] === 'CX'){
+        if(cflag<0){
+          sopr = cnot(sopr, 'unfav');
+          if(opr.length === 0){
+            opr = sopr;
+          }
+          else{
+            opr = crossProduct(sopr, opr);
+          }
+          sopr = [];
+          cflag += 1;
+        }
+        else if(cflag === 0){
+          cflag += 1;
+        }
+        else{
+          invalid = true;
+        }
         cx.push(j);
       }
       else if(opreations[j][i] === 'CCX'){
         ccx.push(j);
       }
     }
-    if(cx.length === 1){
-      if(dot.length !== 1){
-        invalid = true;
-      }
-      else{
-        // opreation on cnot gate
-      }
+    if(cnt_empty === 5){
+      continue;
+    }
+    if(cflag){
+      invalid = true;
+    }
+    if(invalid){
+      break;
     }
     state = dotProduct(opr, state);
   }
@@ -336,20 +553,44 @@ function runCircuit() {
     var normal_factor = 0;
     var labels = [];
     for(var i=0;i<state.length;i++){
-      normal_factor += Math.abs(state[i][0]);
-      if(state[i][0]!=0){
+      var amp = state[i][0].modulus();
+      normal_factor += amp;
+      if(amp!=0){
         labels.push(decimalToBinary(i));
       }
     }
     var percentage = [];
     for(var i=0;i<labels.length;i++){
-      percentage.push((Math.abs(state[binaryToDecimal(labels[i])][0])*100)/normal_factor);
+      percentage.push((state[binaryToDecimal(labels[i])][0].modulus()*100)/normal_factor);
     }
     drawMeasurementProbablity(labels, percentage);
     drawStateVector(state, normal_factor);
   }
 }
-function crossProduct(M1, M2){
+function cnot(middleopr, type) {  // create matrix of opreation b/w cnot implementation
+  if(type === 'fav'){
+    if(middleopr.length === 0){
+      return favCNOT;
+    }
+    var m1 = crossProduct(middleopr, I);
+    var m2 = crossProduct(middleopr, X);
+    var n = middleopr.length*4;
+    for(var i=0;i<n/2; i++){
+      for(var j=0;j<n/2;j++){
+        m1[i].push(new Com(0, 0));
+        m2[i].unshift(new Com(0, 0));
+      }
+    }
+    for(var i=0;i<(n/2);i++){
+      m1.push(m2[i]);
+    }
+    return m1;
+  }
+  else if(type === 'unfav'){
+    return unfavCNOT;
+  }
+}
+function crossProduct(M1, M2) { // M1*M2 Put M2 in M1
   var n1 = M1.length, n2 = M1[0].length, m1 = M2.length, m2 = M2[0].length;
   var ans = [];
   for(var i1=0;i1<n1;i1++){
@@ -357,7 +598,7 @@ function crossProduct(M1, M2){
       var x = [];
       for(var i2=0;i2<n2;i2++){
         for(var j2=0;j2<m2;j2++){
-          x.push(M1[i1][i2]*M2[j1][j2]);
+          x.push(new Com(M1[i1][i2].real*M2[j1][j2].real - M1[i1][i2].img*M2[j1][j2].img, M1[i1][i2].real*M2[j1][j2].img - M1[i1][i2].img*M2[j1][j2].real));
         }
       }
       ans.push(x);
@@ -372,11 +613,12 @@ function dotProduct(M1, M2){
     for(var i1=0;i1<n1;i1++){
       var x = [];
       for(var j2=0;j2<m2;j2++){
-        var p = 0;
-        for(var i=0;i<n2;i++){
-          p += M1[i1][i]*M2[i][j2];
+        var r = 0, img=0;
+        for(var i=0;i<n2;i++){ // M1[i1][i]*M2[i][j2];
+          r += M1[i1][i].real*M2[i][j2].real - M1[i1][i].img*M2[i][j2].img;
+          img += M1[i1][i].real*M2[i][j2].img - M1[i1][i].img*M2[i][j2].real;
         }
-        x.push(p);
+        x.push(new Com(r, img));
       }
       ans.push(x);
     }
@@ -445,12 +687,47 @@ function drawStateVector(s, fac){
   }
   for(var i=0;i<16;i++){
     var x = document.createElement('LI');
-    x.innerHTML = String(Math.sqrt(Math.abs(s[i][0])/fac));
+    x.innerHTML = String(Math.sqrt(s[i][0].modulus()/fac).toFixed(5));
     i1.appendChild(x);
   }
   for(var i=16;i<32;i++){
     var x = document.createElement('LI');
-    x.innerHTML = String(Math.sqrt(Math.abs(s[i][0])/fac));
+    x.innerHTML = String(Math.sqrt(s[i][0].modulus()/fac).toFixed(5));
     i2.appendChild(x);
   }
 }
+
+function copyCode() {
+  if(slt_code === 0) { // qiskit-code
+    navigator.clipboard.writeText(qiskit_code).then(function() {
+      console.log('Async: Copying to clipboard was successful!');
+    }, function(err) {
+      console.error('Async: Could not copy text: ', err);
+    });
+  }
+  else if(slt_code === 1) { // qasm-code
+    navigator.clipboard.writeText(qasm_code).then(function() {
+      console.log('Async: Copying to clipboard was successful!');
+    }, function(err) {
+      console.error('Async: Could not copy text: ', err);
+    });
+  }
+}
+function compileQiskit(val) {
+  var code = val.replace('<div contenteditable="false">from qiskit import *<br></div><div contenteditable="false"><br></div><div contenteditable="false">q = QuantumRegister(4, "q")<br></div><div contenteditable="false">c = ClassicalRegister(4, "c")<br></div><div contenteditable="false">qc = QuantumCircuit(q, c)<br></div>', '').replace(/div|<|>|br|&nbsp;/g, '').split('/');
+  for(var c in code){
+    if(code[c] === '')
+      continue
+    console.log(code[c]);
+  }
+}
+function compileQASM(val) {
+  var code = val.replace('<div contenteditable="false">OPENQASM 2.0;<br></div><div contenteditable="false">include "qelib1.inc";<br></div><div contenteditable="false"><br></div><div contenteditable="false">qreg q[4];<br></div><div contenteditable="false">creg c[4];<br></div>', '').replace(/div|<|>|br|&nbsp;/g, '').split('/');
+  for(var c in code){
+    if(code[c] === '')
+      continue
+    console.log(code[c]);
+  }
+}
+
+

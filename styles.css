@@ -94,6 +94,9 @@ html body {
 .tooltip:hover .tooltiptext-gate {
   visibility: visible;
 }
+[contenteditable] {
+  outline: 0px solid transparent;
+}
 
 /* Navigation bar and common styling*/
 #top-head {
@@ -165,7 +168,7 @@ html body {
 #crt-crt-gate {
   display: inline-flex;
   height: 4vh;
-  width: 61.4vw;
+  width: 67vw;
   border-top: 0.3vh rgb(148, 148, 148, 0.5) solid;
   border-bottom: 0.3vh rgb(148, 148, 148, 0.5) solid;
   overflow-x: hidden;
@@ -244,22 +247,24 @@ html body {
   color: white;
 }
 #crt-code-qiskit {
+  margin-left: 2.5vw;
   color: rgb(202, 202, 202); 
   padding: 1vh;
   padding-left: 0vh;
   font-family: monospace; 
   overflow: auto; 
   height: 26vh; 
-  width: 65vw;
+  width: 62.5vw;
 }
 #crt-code-QASM {
+  margin-left: 2.5vw;
   color: rgb(202, 202, 202); 
   padding: 1vh;
   padding-left: 0vh;
   font-family: monospace; 
   overflow: auto; 
   height: 26vh; 
-  width: 65vw;
+  width: 62.5vw;
 }
 #crt-res {
   border-left: 0.3vh solid black;

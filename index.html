@@ -56,9 +56,12 @@
                 <!-- <div class="crt-crt-item" style="background-color: rgb(255, 94, 0);" draggable="true" ondragstart="drag(event)">CCX</div> -->
                 <div class="crt-crt-item" style="background-color: rgb(255, 204, 64);" draggable="true" ondragstart="drag(event)">H</div>
                 <div class="crt-crt-item" style="background-color: rgb(195, 209, 255);" draggable="true" ondragstart="drag(event)">I</div>
-                <div class="crt-crt-item" style="background-color: rgb(133, 255, 102);" draggable="true" ondragstart="drag(event)">Mz</div>
+                <div class="crt-crt-item" style="background-color: rgb(158, 255, 78);" draggable="true" ondragstart="drag(event)">R1</div>
+                <div class="crt-crt-item" style="background-color: rgb(108, 255, 78);" draggable="true" ondragstart="drag(event)">R2</div>
+                <div class="crt-crt-item" style="background-color: rgb(69, 255, 52);" draggable="true" ondragstart="drag(event)">R3</div>
+                <div class="crt-crt-item" style="background-color: rgb(0, 255, 13);" draggable="true" ondragstart="drag(event)">R4</div>
+                <!-- <div class="crt-crt-item" style="background-color: rgb(133, 255, 102);" draggable="true" ondragstart="drag(event)">Mz</div> -->
               </div>
-              <div class="crt-crt-item" style="background-color: green; padding-top: 1vh; cursor: pointer;" onclick="runCircuit()">Run >></div>
             </div>
             <div id="crt-crt-crt">
               <div id="crt-crt-crt-qubit">
@@ -162,11 +165,12 @@
             <div id="crt-code-heading">
               <div class="crt-code-head-item" onclick="showQiskit()">Qiskit</div>
               <div class="crt-code-head-item" onclick="showQASM()">OpenQASM 2.0</div>
+              <div class="crt-code-head-item" style="margin-left: 47vw;" onclick="copyCode()"><i class="fas fa-clipboard"></i> &nbsp;&nbsp;Copy</div>
             </div>
             <div id="crt-code-body">
-              <div id="crt-code-qiskit">
+              <div id="crt-code-qiskit" contenteditable="true" style="border: none;" spellcheck="false" onkeyup="compileQiskit(this.innerHTML)">
               </div>
-              <div id="crt-code-QASM">
+              <div id="crt-code-QASM" contenteditable="true" style="border: none;" spellcheck="false" onkeypress="compileQASM(this.innerHTML)">
               </div>
             </div>
           </div>
