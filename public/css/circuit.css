@@ -1,0 +1,54 @@
+/*   Circuit   */
+
+#crt {
+  height: 93vh;
+  width: 96.5vw;
+  display: inline-flex;
+}
+#crt-crt-crt-out {
+  margin-top: 1vh;
+} 
+#crt-code {
+  border-top: 0.3vh solid black;
+  width: 68.5vw;
+  height: 45vh;
+  background-color: rgb(66, 66, 66);
+  padding: 1vh;
+  overflow: hidden;
+}
+#crt-code-qiskit {
+  margin-left: 2.5vw;
+  color: rgb(202, 202, 202); 
+  padding: 1vh;
+  padding-left: 0vh;
+  font-family: monospace; 
+  overflow: auto; 
+  height: 35vh; 
+  width: 62.5vw;
+}
+#crt-code-QASM {
+  margin-left: 2.5vw;
+  color: rgb(202, 202, 202); 
+  padding: 1vh;
+  padding-left: 0vh;
+  font-family: monospace; 
+  overflow: auto; 
+  height: 26vh; 
+  width: 62.5vw;
+}
+#statevector1 {
+  width: 12vw;
+  height: 40vh;
+  overflow: auto;
+  font-size: 13px;
+  font-family: monospace;
+  padding-left: 1vw;
+}
+#statevector2 {
+  width: 12vw;
+  height: 40vh;
+  overflow: auto;
+  font-size: 13px;
+  font-family: monospace;
+  padding-left: 0.2vw;
+}

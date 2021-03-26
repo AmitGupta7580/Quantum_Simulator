@@ -1,0 +1,64 @@
+/*   Examples   */
+
+#ex {
+  height: 93vh;
+  width: 96.5vw;
+  display: inline-flex;
+}
+#ex-head {
+  width: 69.5vw;
+  height: 12vh;
+  background-color: rgb(255, 219, 172);
+  display: inline-flex;
+}
+#ex-head-dis {
+  height: 10vh; 
+  width: 46.5vw; 
+  padding: 1vh; 
+  text-align: center;
+}
+#ex-head-type {
+  width: 20vw;
+  height: 6vh;
+  font-size: large;
+  border-radius: 5px;
+}
+select#ex-head-type {
+  border: none;
+  outline:0px;
+}
+#ex-code {
+  border-top: 0.3vh solid black;
+  width: 68.5vw;
+  height: 35vh;
+  background-color: rgb(66, 66, 66);
+  padding: 1vh;
+  overflow: hidden;
+}
+#ex-code-qiskit {
+  margin-left: 2.5vw;
+  color: rgb(202, 202, 202); 
+  padding: 1vh;
+  padding-left: 0vh;
+  font-family: monospace; 
+  overflow: auto; 
+  height: 22vh; 
+  width: 62.5vw;
+}
+#ex-code-QASM {
+  margin-left: 2.5vw;
+  color: rgb(202, 202, 202); 
+  padding: 1vh;
+  padding-left: 0vh;
+  font-family: monospace; 
+  overflow: auto; 
+  height: 22vh; 
+  width: 62.5vw;
+}
+.examples-controller {
+  border-top: 1px solid black;
+  text-align: center;
+  display: none;
+}
+
+/* example 0 */

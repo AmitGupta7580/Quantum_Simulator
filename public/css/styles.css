@@ -1,0 +1,245 @@
+html body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  overflow: hidden;
+}
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;} 
+  to {bottom: 30px; opacity: 1;}
+}
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;} 
+  to {bottom: 0; opacity: 0;}
+}
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+.snackbar {
+  visibility: hidden;
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+}
+.show {
+  visibility: visible;
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+.tooltiptext {
+  margin-left: 2vw;
+  margin-top: 0vw;
+  visibility: hidden;
+  width: auto;
+  background-color: rgb(32, 32, 32);
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  padding: 2vh;
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltiptext-gate {
+  margin-left: -3vw;
+  margin-top: 0vw;
+  visibility: hidden;
+  width: auto;
+  background-color: rgb(32, 32, 32);
+  color: #fff;
+  font-size: 13px;
+  text-align: center;
+  padding: 2vh;
+  position: absolute;
+  z-index: 5;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+.tooltiptog:hover .tooltiptext {
+  visibility: hidden;
+}
+.tooltip:hover .tooltiptext-gate {
+  visibility: visible;
+}
+[contenteditable] {
+  outline: 0px solid transparent;
+}
+
+/* Navigation bar and common styling*/
+#top-head {
+  width: 96.5vw;
+  height: 5vh;
+  background-color: black;
+  padding-top: 2vh;
+  color: white;
+  font-size: larger;
+}
+#slide-nav-btn {
+  height: 7vh;
+  width: 3.5vw;
+  background-color: black;
+  outline: none; 
+  border: none;
+  font-size: 18px;
+  color: rgb(228, 228, 228);
+  cursor: pointer;
+}
+#slide-nav-btn:hover{
+  background-color: rgb(58, 58, 58);
+}
+#side-sh-nav-bar {
+  height: 93vh;
+  width: 3.5vw;
+  background-color: black;
+  color: rgb(192, 192, 192);
+}
+.side-sh-nav-item {
+  height: 7vh;
+  text-align: center;
+  font-size: 18px;
+  cursor: pointer;
+}
+.side-sh-nav-item:hover {
+  background-color: rgb(58, 58, 58);
+}
+#side-nav-bar {
+  margin-left: 3.5vw;
+  position: absolute;
+  visibility: hidden;
+  height: 93vh;
+  width: 15vw;
+  background-color: black;
+  color: rgb(192, 192, 192);
+  z-index: 2;
+}
+.side-nav-item {
+  height: 5vh;
+  padding-top: 2vh;
+  padding-left: 0.5vw;
+  font-size: 15px;
+  cursor: pointer;
+}
+.side-nav-item:hover {
+  background-color: rgb(58, 58, 58);
+}
+
+/* Circuit representation */
+#crt-crt {
+  width: 68.5vw;
+  height: 43vh;
+  padding: 1vw;
+}
+#crt-crt-gate {
+  display: inline-flex;
+  height: 4vh;
+  width: 67vw;
+  border-top: 0.3vh rgb(148, 148, 148, 0.5) solid;
+  border-bottom: 0.3vh rgb(148, 148, 148, 0.5) solid;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  padding: 0.5vh;
+}
+.crt-crt-item {
+  position: relative;
+  margin-left: 1vw;
+  text-align: center;
+  font-size: larger;
+  background-color: black;
+  padding: 0.5vh;
+  padding-left: 1vh;
+  padding-right: 1vh;
+  color: white;
+  cursor: grab;
+}
+.dragging {
+  cursor: grabbing;
+}
+.crt-crt-crt:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+#crt-crt-crt {
+  height: 37vh;
+  border-bottom: 0.3vh rgb(148, 148, 148, 0.5) solid;
+  overflow: hidden;
+  padding: 1.5vh;
+  padding-bottom: 0vh;
+}
+#crt-crt-crt-qubit {
+  height: 37vh;
+  overflow: auto;
+}
+.qubit {
+  margin-top: 2vh;;
+  width: 65vw;
+  height: 5vh;
+  display: inline-flex;
+  overflow: hidden;
+}
+.qubit-gate {
+  margin-left: 1vw;
+  height: 3vh;
+  width: 3vw;
+  background-color: rgb(218, 218, 218);
+  padding: 0.5vh;
+  padding-top: 0.8vh;
+  text-align: center;
+  color: white;
+}
+
+/* Qiskit and QASM code */
+#code-heading {
+  display: inline-flex;
+  padding: 1vh;
+}
+.code-head-item {
+  margin-left: 1vw;
+  color: rgb(155, 155, 155);
+  cursor: pointer;
+  padding: 0.5vh;
+}
+.code-head-item:hover {
+  color: white;
+}
+
+/* Result */
+#res {
+  border-left: 0.3vh solid black;
+  width: 26vw;
+  height: 93vh;
+  padding: 1.5vh;
+}

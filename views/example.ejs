@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quantum Simulator</title>
+  <script src="https://kit.fontawesome.com/58e6bdb37e.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <link rel="stylesheet" href="/public/css/styles.css">
+  <!-- <link rel="stylesheet" href="/public/css/circuit.css"> -->
+  <link rel="stylesheet" href="/public/css/example.css">
+  <script>
+    var slt_item = 3, tab='ex', slt_code = 0, open_nav=0, slt_example=1, r=2;
+    var ex_def_code = 'from qiskit import *\n\nq = QuantumRegister(4, "q")\nc = ClassicalRegister(4, "c")\nqc = QuantumCircuit(q, c)\n\n';
+    var codes = [
+      [
+        'qc.reset(q[0])\nqc.x(q[1])\nqc.h(q[0])\nqc.h(q[1])\nqc.h(q[0])\nqc.h(q[1])',
+        'qc.reset(q[0])\nqc.x(q[1])\nqc.h(q[0])\nqc.h(q[1])\nqc.x(q[1])\nqc.h(q[0])\nqc.h(q[1])',
+        'qc.reset(q[0])\nqc.x(q[1])\nqc.h(q[0])\nqc.h(q[1])\nqc.cx(q[0], q[1])\nqc.h(q[0])\nqc.h(q[1])', 
+        'qc.reset(q[0])\nqc.reset(q[1])\nqc.h(q[0])\nqc.x(q[1])\nqc.x(q[0])\nqc.h(q[1])\nqc.cx(q[0], q[1])\nqc.x(q[0])\nqc.h(q[1])\nqc.h(q[0])'
+      ], 
+      [
+        'qc.reset(q[0])\nqc.reset(q[1])\nqc.reset(q[2])\nqc.x(q[3])\nqc.h(q[0])\nqc.h(q[1])\nqc.h(q[2])\nqc.h(q[3])\nqc.h(q[0])\nqc.h(q[1])\nqc.h(q[2])\nqc.h(q[3])', 
+        'qc.reset(q[0])\nqc.reset(q[1])\nqc.reset(q[2])\nqc.x(q[3])\nqc.h(q[0])\nqc.h(q[1])\nqc.h(q[2])\nqc.h(q[3])\nqc.h(q[0])\nqc.h(q[1])\nqc.h(q[2])\nqc.x(q[3])\nqc.h(q[3])'
+      ], 
+      'code of other examples'
+    ];
+    var descriptions = [
+      "This is the circuit for solving Deutch's Problem. If f(x)=0 or 1 means a constant value then the output of last qubit q0 is 0 otherwise when f(x) is varing with x then q0 is 1", 
+      "This is the circuit for solving Deutch-Jozsa Problem. In this example f(x) = PARITY(x) (balanced). Thus, the output vector (first three qubits) must be non-zero", 
+      "others desription"
+    ];
+  </script>
+  <script src="/public/js/index.js"></script>
+</head>
+<body>
+  <div style="display: inline-flex;">
+    <button id="slide-nav-btn" onclick="toggleSlideMenu()"><i class="fas fa-bars"></i></button>
+    <div id="top-head">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Quantum Simulator
+    </div>
+  </div>
+  <div style="display: inline-flex;">
+    <div id="side-sh-nav-bar">
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-atom" style="padding-top: 2vh;" onclick="window.location.href = '/circuit'"></i><span class="tooltiptext">Simulator</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-cloud" style="padding-top: 2vh;" onclick="window.location.href = '/cloud'"></i><span class="tooltiptext">Cloud IBM Simulator</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-subscript" style="padding-top: 2vh;" onclick="window.location.href = '/function'"></i><span class="tooltiptext">Functions</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fab fa-etsy" style="padding-top: 2vh;"></i><span class="tooltiptext">Examples</span></div>
+      <div class="side-sh-nav-item" style="background-color: black;"></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-book" style="padding-top: 2vh;" onclick="window.location.href = 'docs'"></i><span class="tooltiptext">Documentation</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-question" style="padding-top: 2vh;" onclick="window.location.href ='hiw'"></i><span class="tooltiptext">How It Works</span></div>
+      <div class="side-sh-nav-item tooltip"><i class="fas fa-info" style="padding-top: 2vh;" onclick="window.location.href = 'info'"></i><span class="tooltiptext">Info</span></div>
+    </div>
+    <div id="side-nav-bar">
+      <div class="side-nav-item" onclick="window.location.href = '/circuit'">Quantum Circuit Simulator</div>
+      <div class="side-nav-item" onclick="window.location.href = '/cloud'">IBM Quantum Simulator</div>
+      <div class="side-nav-item" onclick="window.location.href = '/function'">Function Simulator</div>
+      <div class="side-nav-item">Examples</div>
+      <div class="side-nav-item"></div>
+      <div class="side-nav-item" onclick="window.location.href = '/docs'">Documentation</div>
+      <div class="side-nav-item" onclick="window.location.href = '/hiw'">How It Works</div>
+      <div class="side-nav-item" onclick="window.location.href = '/info'">About Us</div>
+    </div>
+    <div id="ex">
+      <div style="width: 70.5vw; height: 93vh;">
+        <!-- Example Specific -->
+        <div id="ex-head">    <!-- list of all examples -->
+          <div style="height: 7vh; padding: 2.5vh;">
+            <select id="ex-head-type" onchange="changeExample(this.value);">
+              <option value="0">Deutch's Problem</option>
+              <option value="1">Deutch-Jozsa Problem</option>
+              <option value="2">Bernstein-Vazirani Problem</option>
+              <option value="3">Grover 2 qubits</option>
+              <option value="4">Grover 3 qubits</option>
+              <option value="5">Shor 4 qubits</option>
+            </select>
+          </div>
+          <div id="ex-head-dis"></div>
+        </div>
+        <div id="crt-crt">
+          <div style="display: inline-flex;">
+            <div id="crt-crt-gate">
+              <div class="crt-crt-item" style="background-color: white; color: black; margin-left: 0px; cursor: default;">Gates</div>
+              <div class="crt-crt-item" style="background-color: rgb(218, 218, 218);" draggable="true" ondragstart="drag(event)">--</div>
+              <div class="crt-crt-item" style="background-color: rgb(165, 165, 165); padding-top: 1vh;" draggable="true" ondragstart="drag(event)">*</div>
+              <div class="crt-crt-item" style="background-color: black" draggable="true" ondragstart="drag(event)">|0></div>
+              <div class="crt-crt-item" style="background-color: rgb(255, 117, 37);" draggable="true" ondragstart="drag(event)">X</div>
+              <div class="crt-crt-item" style="background-color: rgb(255, 94, 0);" draggable="true" ondragstart="drag(event)">CX</div>
+              <div class="crt-crt-item" style="background-color: rgb(255, 204, 64);" draggable="true" ondragstart="drag(event)">H</div>
+              <div class="crt-crt-item" style="background-color: rgb(195, 209, 255);" draggable="true" ondragstart="drag(event)">I</div>
+              <div class="crt-crt-item" style="background-color: rgb(158, 255, 78);" draggable="true" ondragstart="drag(event)">R1</div>
+              <div class="crt-crt-item" style="background-color: rgb(108, 255, 78);" draggable="true" ondragstart="drag(event)">R2</div>
+              <div class="crt-crt-item" style="background-color: rgb(69, 255, 52);" draggable="true" ondragstart="drag(event)">R3</div>
+              <div class="crt-crt-item" style="background-color: rgb(0, 255, 13);" draggable="true" ondragstart="drag(event)">R4</div>
+            </div>
+          </div>
+          <div id="crt-crt-crt">
+            <div id="crt-crt-crt-qubit">
+              <% for(var i=0;i<5;i++){ %>
+                <div class="qubit">
+                  <div class="qubit-label">q<%=i%></div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                  <div class="qubit-gate" ondrop="drop(event)" ondragover="allowDrop(event)">--</div>
+                </div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+        <div id="ex-code">
+          <div id="code-heading">
+            <div class="code-head-item" onclick="showQiskit()">Qiskit</div>
+            <div class="code-head-item" onclick="showQASM()">OpenQASM 2.0</div>
+            <div class="code-head-item" style="margin-left: 47vw;" onclick="copyCode()"><i class="fas fa-clipboard"></i> &nbsp;&nbsp;Copy</div>
+          </div>
+          <div id="code-body">
+            <div id="ex-code-qiskit" contenteditable="true" style="border: none;" spellcheck="false" onkeyup="compileQiskit(this.innerHTML)">
+            </div>
+            <div id="ex-code-QASM" contenteditable="true" style="border: none;" spellcheck="false" onkeyup="compileQASM(this.innerHTML)">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="res">
+        <div style="width: 23.5vw; border-bottom: 1px solid black; padding: 1vh;">Measurement Probabilities</div>
+        <div id="result-container1" style="width: 23vw;"></div>
+        <!-- Example Specific -->
+        <div class="examples-controller">
+          <br><h2>Function&nbsp;&nbsp;&nbsp;&nbsp;</h2><br>
+          <div style="display: inline-flex; background-color: rgb(255, 209, 149); padding: 1vh;">
+            <div style="height: 10vh; width: 4vw; padding-top: 8vh;">
+              f(x) &nbsp;&nbsp;= 
+            </div>
+            <div style="height: 18vh; width: 7vw; font-size: 20px;">
+              <div id="ex-0-fun-chechbox">
+                <input type="radio" name="0" checked onchange="zeroSwitchFunctionType(0);">
+                <label>0</label><br>
+                <input type="radio" name="0" onchange="zeroSwitchFunctionType(1);">
+                <label>1</label><br><br>
+                <input type="radio" name="0" onchange="zeroSwitchFunctionType(2);">
+                <label>X</label><br>
+                <input type="radio" name="0" onchange="zeroSwitchFunctionType(3);">
+                <label>X'</label><br>
+              </div>
+            </div>
+            <div style="height: 10vh; width: 8vw; padding-top: 2vh;">
+              Constant<br><br><br><br>Non-Constant
+            </div>
+          </div>
+          <!-- Future Task -->
+          <!-- Div to display result of simulation -->
+          <!-- <div style="height: 4vh; width: 20vw; background-color: rgb(134, 255, 140); margin-top: 2vh; margin-left: 2.3vw; text-align: center; padding-top: 1vh;"></div> -->
+        </div>
+        <div class="examples-controller">
+          <br><h2>Function&nbsp;&nbsp;&nbsp;&nbsp;</h2><br>
+          <div style="display: inline-flex; background-color: rgb(255, 209, 149); padding: 1vh;">
+            <div style="height: 7vh; width: 4vw; padding-top: 8vh;">
+              f(x) &nbsp;&nbsp;= 
+            </div>
+            <div style="height: 15vh; width: 9vw; font-size: 20px;">
+              <div id="ex-1-fun-chechbox">
+                <input type="radio" name="0" checked onchange="oneSwitchFunctionType(0);">
+                <label>0</label><br>
+                <input type="radio" name="0" onchange="oneSwitchFunctionType(1);">
+                <label>1</label><br><br>
+                <input type="radio" name="0" onchange="oneSwitchFunctionType(2);">
+                <label><button onclick="">Change Func</button></label><br>
+              </div>
+            </div>
+            <div style="height: 7vh; width: 8vw; padding-top: 2vh;">
+              Constant<br><br><br>Non-Constant
+            </div>
+          </div>
+        </div>
+        <div class="examples-controller">
+          Hello World 2
+        </div>
+        <div class="examples-controller">
+          Hello World 3
+        </div>
+        <div class="examples-controller">
+          Hello World 4
+        </div>
+        <div class="examples-controller">
+          Hello World 5
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="sk-bar" class="snackbar"></div>
+
+  <script>
+    document.querySelectorAll('.side-sh-nav-item')[slt_item].style.color = "white";
+    document.querySelectorAll('.side-sh-nav-item')[slt_item].style.borderLeft = "3px solid red";
+    document.querySelectorAll('.side-nav-item')[slt_item].style.color = "white";
+    document.querySelectorAll('.code-head-item')[slt_code].style.color = "white";
+    document.querySelectorAll('.code-head-item')[slt_code].style.borderBottom = "1.5px solid white";
+    document.getElementById(tab+'-code-qiskit').style.display = "block";
+    document.getElementById(tab+'-code-QASM').style.display = "none";
+    var qiskit = document.getElementById(tab+'-code-qiskit');
+    var qasm = document.getElementById(tab+'-code-QASM');
+    var qiskit_code , qasm_code;
+
+    changeExample(slt_example);
+
+    function changeExample(item){
+      document.querySelectorAll('.examples-controller')[slt_example].style.display = "none";
+      document.querySelectorAll('.examples-controller')[item].style.display = "block";
+      document.getElementById('ex-head-dis').innerHTML = descriptions[item];
+      if(item <= 1){
+        qiskit_code = ex_def_code + codes[item][0];
+        displayCode('qiskit');
+        compileQiskit(qiskit.innerHTML);
+        // document.getElementById()
+      }
+      else{
+        qiskit_code = ex_def_code + codes[item];
+        displayCode('qiskit');
+        compileQiskit(qiskit.innerHTML);
+      }
+      slt_example = item;
+    }
+
+    /* functions of example 0 */
+    function zeroSwitchFunctionType(value){
+      qiskit_code = ex_def_code + codes[0][value];
+      displayCode('qiskit');
+      compileQiskit(qiskit.innerHTML);
+    }
+    /* functions of example 1 */
+    function oneSwitchFunctionType(value){
+      qiskit_code = ex_def_code + codes[1][value];
+      displayCode('qiskit');
+      compileQiskit(qiskit.innerHTML);
+    }
+  </script>
+</body>
+</html>
