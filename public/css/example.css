@@ -15,6 +15,7 @@
   height: 10vh; 
   width: 46.5vw; 
   padding: 1vh; 
+  padding-top: 1.5vh;
   text-align: center;
 }
 #ex-head-type {
@@ -61,4 +62,8 @@ select#ex-head-type {
   display: none;
 }
 
-/* example 0 */
+/* example 2 */
+#ex-2-fun-input {
+  width: 3vw;
+  margin-top: 4.5vh;
+}

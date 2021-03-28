@@ -107,16 +107,13 @@ function runCircuit() {
             opr = crossProduct(H, opr);
           }
         }
-        else if(cflag > 0){
+        else{
           if(sopr.length === 0){
             sopr = H;
           }
           else{
             sopr = crossProduct(H, sopr);
           }
-        }
-        else{
-          invalid = true;
         }
       }
       else if(opreations[j][i] === 'X'){
@@ -128,16 +125,13 @@ function runCircuit() {
             opr = crossProduct(X, opr);
           }
         }
-        else if(cflag > 0){
+        else{
           if(sopr.length === 0){
             sopr = X;
           }
           else{
             sopr = crossProduct(X, sopr);
           }
-        }
-        else{
-          invalid = true;
         }
       }
       else if(opreations[j][i] === '0'){
@@ -149,16 +143,13 @@ function runCircuit() {
             opr = crossProduct(reset, opr);
           }
         }
-        else if(cflag > 0){
+        else{
           if(sopr.length === 0){
             sopr = reset;
           }
           else{
             sopr = crossProduct(reset, sopr);
           }
-        }
-        else{
-          invalid = true;
         }
       }
       else if(opreations[j][i] === 'I'){
@@ -170,16 +161,13 @@ function runCircuit() {
             opr = crossProduct(I, opr);
           }
         }
-        else if(cflag > 0){
+        else{
           if(sopr.length === 0){
             sopr = I;
           }
           else{
             sopr = crossProduct(I, sopr);
           }
-        }
-        else{
-          invalid = true;
         }
       }
       else if(opreations[j][i] === '--'){
@@ -191,16 +179,13 @@ function runCircuit() {
             opr = crossProduct(I, opr);
           }
         }
-        else if(cflag > 0){
+        else{
           if(sopr.length === 0){
             sopr = I;
           }
           else{
             sopr = crossProduct(I, sopr);
           }
-        }
-        else{
-          invalid = true;
         }
         cnt_empty+=1;
       }
@@ -213,16 +198,13 @@ function runCircuit() {
             opr = crossProduct(R1, opr);
           }
         }
-        else if(cflag > 0){
+        else{
           if(sopr.length === 0){
             sopr = R1;
           }
           else{
             sopr = crossProduct(R1, sopr);
           }
-        }
-        else{
-          invalid = true;
         }
       }
       else if(opreations[j][i] === 'R2'){
@@ -234,16 +216,13 @@ function runCircuit() {
             opr = crossProduct(R2, opr);
           }
         }
-        else if(cflag > 0){
+        else{
           if(sopr.length === 0){
             sopr = R2;
           }
           else{
             sopr = crossProduct(R2, sopr);
           }
-        }
-        else{
-          invalid = true;
         }
       }
       else if(opreations[j][i] === 'R3'){
@@ -255,16 +234,13 @@ function runCircuit() {
             opr = crossProduct(R3, opr);
           }
         }
-        else if(cflag > 0){
+        else{
           if(sopr.length === 0){
             sopr = R3;
           }
           else{
             sopr = crossProduct(R3, sopr);
           }
-        }
-        else{
-          invalid = true;
         }
       }
       else if(opreations[j][i] === 'R4'){
@@ -276,16 +252,13 @@ function runCircuit() {
             opr = crossProduct(R4, opr);
           }
         }
-        else if(cflag > 0){
+        else{
           if(sopr.length === 0){
             sopr = R4;
           }
           else{
             sopr = crossProduct(R4, sopr);
           }
-        }
-        else{
-          invalid = true;
         }
       }
       else if(opreations[j][i] === 'Mz'){
@@ -341,6 +314,7 @@ function runCircuit() {
       invalid = true;
     }
     if(invalid){
+      console.log("lol");
       break;
     }
     state = dotProduct(opr, state);
@@ -380,20 +354,35 @@ function cnot(middleopr, type) {  // create matrix of opreation b/w cnot impleme
     }
     var m1 = crossProduct(middleopr, I);
     var m2 = crossProduct(middleopr, X);
-    var n = middleopr.length*4;
-    for(var i=0;i<n/2; i++){
-      for(var j=0;j<n/2;j++){
+    var n = middleopr.length*2;
+    for(var i=0;i<n; i++){
+      for(var j=0;j<n;j++){
         m1[i].push(new Com(0, 0));
         m2[i].unshift(new Com(0, 0));
       }
     }
-    for(var i=0;i<(n/2);i++){
+    for(var i=0;i<n;i++){
       m1.push(m2[i]);
     }
     return m1;
   }
   else if(type === 'unfav'){
-    return unfavCNOT;
+    if(middleopr.length === 0){
+      return unfavCNOT;
+    }
+    var m1 = crossProduct(middleopr, [[new Com(1, 0), new Com(0, 0)], [new Com(0, 0), new Com(0, 0)]]);
+    var m2 = crossProduct(middleopr, [[new Com(0, 0), new Com(0, 0)], [new Com(0, 0), new Com(1, 0)]]);
+    var n = middleopr.length*2;
+    for(var i=0;i<n; i++){
+      for(var j=0;j<n;j++){
+        m1[i].push(m2[i][j]);
+        m2[i].push(m1[i][j]);
+      }
+    }
+    for(var i=0;i<n;i++){
+      m1.push(m2[i]);
+    }
+    return m1;
   }
 }
 function crossProduct(M1, M2) { // M1*M2 Put M2 in M1
