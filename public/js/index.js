@@ -579,7 +579,7 @@ function displayCode(type) {
   }
 }
 function generateQiskitCode() {
-  var def_code = 'from qiskit import *\n\nq = QuantumRegister(4, "q")\nc = ClassicalRegister(4, "c")\nqc = QuantumCircuit(q, c)\n';
+  var def_code = 'from qiskit import *\n\nq = QuantumRegister(5, "q")\nc = ClassicalRegister(5, "c")\nqc = QuantumCircuit(q, c)\n';
   var opreations = [];
   document.getElementById(tab).querySelectorAll('.qubit').forEach((qubit) => {
     var op = [];
@@ -651,7 +651,7 @@ function generateQiskitCode() {
   qiskit_code = def_code;
 }
 function compileQiskit(val) {
-  var code = val.replace('<div contenteditable="false">from qiskit import *<br></div><div contenteditable="false"><br></div><div contenteditable="false">q = QuantumRegister(4, "q")<br></div><div contenteditable="false">c = ClassicalRegister(4, "c")<br></div><div contenteditable="false">qc = QuantumCircuit(q, c)<br></div>', '').replace(/<\/div>/g, '?').replace(/div|<|>|br|&nbsp;/g, '').split('?');
+  var code = val.replace('<div contenteditable="false">from qiskit import *<br></div><div contenteditable="false"><br></div><div contenteditable="false">q = QuantumRegister(5, "q")<br></div><div contenteditable="false">c = ClassicalRegister(5, "c")<br></div><div contenteditable="false">qc = QuantumCircuit(q, c)<br></div>', '').replace(/<\/div>/g, '?').replace(/div|<|>|br|&nbsp;/g, '').split('?');
   var invalid = false;
   document.querySelectorAll('.qubit').forEach((q) => {
     q.querySelectorAll('.qubit-gate').forEach((qg) => {
@@ -1059,7 +1059,7 @@ function compileQiskit(val) {
   }
 }
 function generateQASMCode() {
-  var def_code = 'OPENQASM 2.0;\ninclude "qelib1.inc";\n\nqreg q[4];\ncreg c[4];\n';
+  var def_code = 'OPENQASM 2.0;\ninclude "qelib1.inc";\n\nqreg q[5];\ncreg c[5];\n';
   var opreations = [];
   document.getElementById(tab).querySelectorAll('.qubit').forEach((qubit) => {
     var op = [];
@@ -1131,7 +1131,7 @@ function generateQASMCode() {
   qasm_code = def_code;
 }
 function compileQASM(val) {
-  var code = val.replace('<div contenteditable="false">OPENQASM 2.0;<br></div><div contenteditable="false">include "qelib1.inc";<br></div><div contenteditable="false"><br></div><div contenteditable="false">qreg q[4];<br></div><div contenteditable="false">creg c[4];<br></div>', '').replace(/<\/div>/g, '?').replace(/div|<|>|br|&nbsp;/g, '').split('?');;
+  var code = val.replace('<div contenteditable="false">OPENQASM 2.0;<br></div><div contenteditable="false">include "qelib1.inc";<br></div><div contenteditable="false"><br></div><div contenteditable="false">qreg q[5];<br></div><div contenteditable="false">creg c[5];<br></div>', '').replace(/<\/div>/g, '?').replace(/div|<|>|br|&nbsp;/g, '').split('?');;
   var invalid = false;
   document.querySelectorAll('.qubit').forEach((q) => {
     q.querySelectorAll('.qubit-gate').forEach((qg) => {
